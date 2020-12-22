@@ -11,12 +11,21 @@ const DetailScreen = (params) => {
   const navigation = useNavigation();
   useEffect(()=> {
     const unsubscribe = navigation.addListener('focus', (params) => {
-      Alert.alert('focus');
+      // Alert.alert('focus');
     });
     return unsubscribe;
 
   },[navigation]);
 
+  const getGuid = () => {
+    let s4 = function () {
+      return Math.floor((1 + Math.random()) * 0x10000)
+        .toString(16)
+        .substring(1);
+    };
+    return s4() + s4() + s4() + s4() + s4() + s4() + s4() + s4();
+  }
+  
   const handleTouchMove = (event) => {
     // console.log(JSON.stringify(event.nativeEvent));
     const { locationX, locationY, touches } = event.nativeEvent;
@@ -25,15 +34,29 @@ const DetailScreen = (params) => {
   }
 
   const handleTouchEnd = (event) => {
+    // 線一本を１オブジェクトとして保存
+    const key = getGuid(),
+          curPoints = [
+            ...points,
+            {
+              key,
+              list: tmpPoints,
+            }
+          ];
+    
+    // setPoints(points.concat(tmpPoints || []));
+    setPoints(curPoints || []);
 
-    setPoints(points.concat(tmpPoints || []));
+    // console.log(curPoints);
+    // console.log(curPoints.length);
     setTmpPoints([]);
   }
 
-  const getStringPoints = () => {
-    if(points.length){
+  const getStringPoints = (ps) => {
+    // console.log(ps);
+    if(ps.length){
       let stringPoints = '';
-      points.forEach((v,i) => {
+      ps.forEach((v, i) => {
         stringPoints += Object.values(v).join() + ' ';
       });
       return stringPoints;
@@ -42,7 +65,7 @@ const DetailScreen = (params) => {
   }
 
   const getStringTmpPoints = () => {
-    if(points.length){
+    if(tmpPoints.length){
       let stringPoints = '';
       tmpPoints.forEach((v,i) => {
         stringPoints += Object.values(v).join() + ' ';
@@ -95,22 +118,31 @@ const DetailScreen = (params) => {
             />
             {/* <Circle cx={window.width / 2} cy={window.height / 2} r="45" stroke="blue" strokeWidth="2.5" fill="#2272bf" /> */}
           
-            <Polyline
+            {/* <Polyline
               fill='none'
               stroke='#000'
               strokeWidth='3'
               points={getStringPoints()}
-            />
+            /> */}
 
+            {points.map((v, i) => (
+              <Polyline
+                key={v.key}
+                fill='none'
+                stroke='#000'
+                strokeWidth='2'
+                points={getStringPoints(v.list || [])}
+              />
+            ))}
             <Polyline
               fill='none'
               stroke='#000'
-              strokeWidth='3'
+              strokeWidth='2'
               points={getStringTmpPoints()}
             />
           </Svg>
         </View>
-        <Button title='clear polylines' onPress={() => setPoints([])}/>
+        <Button title='clear polyline' onPress={() => setPoints([])}/>
       </View>
     </SafeAreaView>
   )
