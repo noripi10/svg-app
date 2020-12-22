@@ -93,7 +93,7 @@ const DetailScreen = (params) => {
               strokeWidth="1"
               fill="#fff"
             />
-            <Circle cx={window.width / 2} cy={window.height / 2} r="45" stroke="blue" strokeWidth="2.5" fill="#2272bf" />
+            {/* <Circle cx={window.width / 2} cy={window.height / 2} r="45" stroke="blue" strokeWidth="2.5" fill="#2272bf" /> */}
           
             <Polyline
               fill='none'
