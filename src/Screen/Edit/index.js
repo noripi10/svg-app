@@ -1,36 +1,35 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, Alert, useWindowDimensions, Button } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Svg, { Polyline, Rect, Circle } from 'react-native-svg';
-const DetailScreen = (params) => {
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { AppContext, getGuid } from '../../Util/Common';
+import { useContext } from 'react';
+
+const EditScreen = () => {
+  const {state, dispatch} = useContext(AppContext);
   const [tmpPoints, setTmpPoints] = useState([]);
   const [points, setPoints] = useState([]);
 
   const window = useWindowDimensions();
   const navigation = useNavigation();
+  const route = useRoute();
+  const refNew = useRef(!!route.params);
+
+  let item = {};
+  if (refNew){
+    item = JSON.parse(route.params.item || '') || {};
+  }
+
   useEffect(()=> {
     const unsubscribe = navigation.addListener('focus', (params) => {
-      // Alert.alert('focus');
     });
     return unsubscribe;
-
   },[navigation]);
-
-  const getGuid = () => {
-    let s4 = function () {
-      return Math.floor((1 + Math.random()) * 0x10000)
-        .toString(16)
-        .substring(1);
-    };
-    return s4() + s4() + s4() + s4() + s4() + s4() + s4() + s4();
-  }
   
   const handleTouchMove = (event) => {
-    // console.log(JSON.stringify(event.nativeEvent));
     const { locationX, locationY, touches } = event.nativeEvent;
     setTmpPoints([...tmpPoints, {x: locationX, y: locationY}]);
-    // console.log(points);
   }
 
   const handleTouchEnd = (event) => {
@@ -43,17 +42,11 @@ const DetailScreen = (params) => {
               list: tmpPoints,
             }
           ];
-    
-    // setPoints(points.concat(tmpPoints || []));
     setPoints(curPoints || []);
-
-    // console.log(curPoints);
-    // console.log(curPoints.length);
     setTmpPoints([]);
   }
 
   const getStringPoints = (ps) => {
-    // console.log(ps);
     if(ps.length){
       let stringPoints = '';
       ps.forEach((v, i) => {
@@ -75,7 +68,7 @@ const DetailScreen = (params) => {
     return '';
   }
   return(
-    <SafeAreaView
+    <View
       style={{
         flex: 1,
         justifyContent: 'center',
@@ -83,19 +76,20 @@ const DetailScreen = (params) => {
       }}
     >
       <View
-        // style={{
-        //   flex: 1,
-        //   justifyContent: 'center',
-        //   alignItems: 'center',
-        // }}
+        style={{
+          alignItems: 'center',
+        }}
       >
-        <Text>DetailScreen</Text>
-        <Text>{JSON.stringify(params)}</Text>
+        {/* <Text>{JSON.stringify(params)}</Text> */}
         <View
           onTouchMove={handleTouchMove}
           // onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           // onTouchCancel={handleTouchCancel}
+          style={{
+            height: window.height * 0.75,
+            width: window.width * 0.95,
+          }}
         >
           <Svg
             height={window.height * 0.75} 
@@ -142,10 +136,20 @@ const DetailScreen = (params) => {
             />
           </Svg>
         </View>
-        <Button title='clear polyline' onPress={() => setPoints([])}/>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Button title='clear polyline' onPress={() => setPoints([])}/>
+          <Button title='save'/>
+        </View>
+
       </View>
-    </SafeAreaView>
+    </View>
   )
 }
 
-export default DetailScreen;
+export default EditScreen;
