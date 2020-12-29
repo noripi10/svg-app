@@ -1,25 +1,37 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, Alert, useWindowDimensions, Button } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useEffect, useState, useContext, useRef } from 'react';
+import { View, Alert, useWindowDimensions, Button } from 'react-native';
+// import { Input } from 'react-native-elements';
+// import Icon from 'react-native-vector-icons/FontAwesome';
 import Svg, { Polyline, Rect, Circle } from 'react-native-svg';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { AppContext, getGuid } from '../../Util/Common';
-import { useContext } from 'react';
+import { AppContext, getDate, getGuid, memoObject } from '../../Util/Common';
 
 const EditScreen = () => {
   const {state, dispatch} = useContext(AppContext);
-  const [tmpPoints, setTmpPoints] = useState([]);
+  const [item, setItem] = useState(memoObject);
+  const [currentStroke, setCurrentStroke] = useState('#000');
+  const [currentStrokeWidth, setCurrentStrokeWidth] = useState('2');
+  const [currentPoints, setCurrentPoints] = useState([]);
   const [points, setPoints] = useState([]);
+  const refNew = useRef(true);
 
   const window = useWindowDimensions();
   const navigation = useNavigation();
   const route = useRoute();
-  const refNew = useRef(!!route.params);
 
-  let item = {};
-  if (refNew){
-    item = JSON.parse(route.params.item || '') || {};
-  }
+  useEffect(() => {
+    if(route.params){
+      try{
+        const tmpItem = route.params.item;
+        refNew.current = false;
+        setItem(tmpItem);            
+      }catch(e){
+        console.log(e);
+        Alert.alert('データ取得エラー');
+        navigation.goBack();
+      }    
+    }
+  },[]);
 
   useEffect(()=> {
     const unsubscribe = navigation.addListener('focus', (params) => {
@@ -29,27 +41,54 @@ const EditScreen = () => {
   
   const handleTouchMove = (event) => {
     const { locationX, locationY, touches } = event.nativeEvent;
-    setTmpPoints([...tmpPoints, {x: locationX, y: locationY}]);
+    setCurrentPoints([...currentPoints, {x: locationX, y: locationY}]);
   }
 
   const handleTouchEnd = (event) => {
     // 線一本を１オブジェクトとして保存
-    const key = getGuid(),
-          curPoints = [
-            ...points,
-            {
-              key,
-              list: tmpPoints,
-            }
-          ];
-    setPoints(curPoints || []);
-    setTmpPoints([]);
+    try{
+      setItem({
+        ...item,
+        lineList: [
+          ...item.lineList,
+          {
+            key: getGuid(),
+            stroke: currentStroke,
+            strokeWidth: currentStrokeWidth,
+            points: currentPoints,
+          }
+        ]
+      });
+    }catch(e){
+      console.log('error', e);
+    }
+
+    setCurrentPoints([]);
   }
 
-  const getStringPoints = (ps) => {
-    if(ps.length){
+  // const handleChangeTitle = (title) => {
+  //   setItem({
+  //     ...item,
+  //     title,
+  //   })
+  // }
+
+  const handleSaveData = () => {
+    dispatch({
+      TYPE: 'ITEM_UPDATE',
+      INSERT: refNew.current,
+      ITEM: {
+        ...item,
+        lastDate: getDate(),
+      }
+    });
+    Alert.alert('保存しました');
+  }
+
+  const getPointsString = (points) => {
+    if(points.length){
       let stringPoints = '';
-      ps.forEach((v, i) => {
+      points.forEach((v, i) => {
         stringPoints += Object.values(v).join() + ' ';
       });
       return stringPoints;
@@ -57,10 +96,10 @@ const EditScreen = () => {
     return '';
   }
 
-  const getStringTmpPoints = () => {
-    if(tmpPoints.length){
+  const getCurrentPointsString = () => {
+    if(currentPoints.length){
       let stringPoints = '';
-      tmpPoints.forEach((v,i) => {
+      currentPoints.forEach((v,i) => {
         stringPoints += Object.values(v).join() + ' ';
       });
       return stringPoints;
@@ -80,7 +119,19 @@ const EditScreen = () => {
           alignItems: 'center',
         }}
       >
-        {/* <Text>{JSON.stringify(params)}</Text> */}
+        {/* <Input
+          style={{width: window.width * 0.9}}
+          placeholder='title'
+          leftIcon={
+            <Icon
+              name='rocket'
+              size={24}
+              color='black'
+            />
+          }
+          
+          onChangeText={(text) => handleChangeTitle(text)}
+        /> */}
         <View
           onTouchMove={handleTouchMove}
           // onTouchStart={handleTouchStart}
@@ -119,20 +170,20 @@ const EditScreen = () => {
               points={getStringPoints()}
             /> */}
 
-            {points.map((v, i) => (
+            {item.lineList && item.lineList.map((line, i) => (
               <Polyline
-                key={v.key}
+                key={line.key}
                 fill='none'
-                stroke='#000'
-                strokeWidth='2'
-                points={getStringPoints(v.list || [])}
+                stroke={line.stroke}
+                strokeWidth={line.strokeWidth}
+                points={getPointsString(line.points || [])}
               />
             ))}
             <Polyline
               fill='none'
-              stroke='#000'
-              strokeWidth='2'
-              points={getStringTmpPoints()}
+              stroke={currentStroke}
+              strokeWidth={currentStrokeWidth}
+              points={getCurrentPointsString()}
             />
           </Svg>
         </View>
@@ -144,7 +195,7 @@ const EditScreen = () => {
           }}
         >
           <Button title='clear polyline' onPress={() => setPoints([])}/>
-          <Button title='save'/>
+          <Button title='save' onPress={() => handleSaveData()}/>
         </View>
 
       </View>

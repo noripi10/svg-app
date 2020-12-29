@@ -1,11 +1,10 @@
 import React, {useEffect} from 'react';
-import { View, Text, Button, Alert, Dimensions } from 'react-native';
+import { View, Text, Dimensions } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { useContext } from 'react';
-import { AppContext } from '../../Util/Common';
-import { storage, getGuid } from '../../Util/Common';
-import { get } from 'react-native/Libraries/Utilities/PixelRatio';
+import { AppContext, getDate, storage, getGuid } from '../../Util/Common';
+import Separator from '../../Elements/Separator';
 
 const HomeScreen = (params) => {
   const navigation = useNavigation();
@@ -16,34 +15,59 @@ const HomeScreen = (params) => {
       try{
         let result = await storage.load({key: 'memoList'});
         if (result) {
-          console.log(result);
           dispatch({
             TYPE: 'DATA_INIT',
             memoList: result,
           });
         } else {
-          // dispatch({
-          //   TYPE: 'DATA_INIT',
-          //   memoList: [
-          //     {id: 'a', title: 'title_a', lastDate: new Date(), lines: []},
-          //     {id: 'a', title: 'title_a', lastDate: new Date(), lines: []},
-          //     {id: 'a', title: 'title_a', lastDate: new Date(), lines: []},
-          //   ],
-          // });
+          dispatch({
+            TYPE: 'DATA_INIT',
+            memoList: [],
+          });
         }
-        dispatch({
-          TYPE: 'DATA_INIT',
-          memoList: [
-            {id: getGuid(), title: 'title_a', lastDate: new Date(), lines: []},
-            {id: getGuid(), title: 'title_a', lastDate: new Date(), lines: []},
-            {id: getGuid(), title: 'title_a', lastDate: new Date(), lines: []},
-          ],
-        });
+
+        // test_data
+        const testList = [
+          {
+            id: 'memo_' + getGuid(),
+            title: 'test_title_a',
+            lastDate: getDate(),
+            lineList: [
+              // {
+              //   lineId: 'line_' + getGuid(),
+              //   index: 1,
+              //   color: '#000',
+              //   weight: 2,
+              //   points: [],
+              // },
+            ]
+          },
+          {
+            id: 'memo_' + getGuid(),
+            title: 'test_title_b',
+            lastDate: getDate(),
+            lineList: [
+              // {
+              //   lineId: 'line_' + getGuid(),
+              //   index: 1,
+              //   color: '#000',
+              //   weight: 2,
+              //   points: [],
+              // },
+            ]
+          },
+        ];
+
+        // テストでデータ作成と登録
+        // dispatch({
+        //   TYPE: 'DATA_INIT_TEST',
+        //   memoList: testList,
+        // });
 
       }catch(e){
         console.log(e);
         dispatch({
-          TYPE: 'DATA_INIT',
+          TYPE: 'DATA_INIT_TEST',
           memoList: [],
         });
       }
@@ -51,51 +75,72 @@ const HomeScreen = (params) => {
     func();
   },[]);
 
-  const renderItem = ({item}) => {
+  const handleDeleteItem = (id) => {
+    dispatch({
+      TYPE: 'ITEM_DELETE',
+      ID: id,
+    });
+  }
+
+  const renderItem = ({item, index}) => {
     return (
       <View
         style={{
           height: 50,
-          width: Dimensions.get('window').width * 0.95,
-          alignItems: 'flex-start',
-          justifyContent: 'center',
+          width: Dimensions.get('window').width,
+          alignItems: 'center',
+          justifyContent: 'flex-start',
+          flexDirection: 'row',
+          paddingLeft: 10,
+          backgroundColor: (index % 2 === 0  || index === 0) ? '#ccc' : '#eee',
         }}
       >
         <TouchableOpacity
-          onPress={() => {navigation.navigate('Edit', {item: JSON.stringify(item)})}}
+          onPress={() => {navigation.navigate('Edit', {item})}}
         >
-          <Text>{item.id + '  ' + item.title + '  ' + item.lastDate.toString()} </Text>
-        </TouchableOpacity>      
+          <Text>{item.id} </Text>
+          <Text>{item.title}</Text>
+          <Text>{item.lastDate}</Text>
+        </TouchableOpacity>
+        <View
+          style={{position: 'absolute', right : 10}}
+        >
+          <TouchableOpacity
+            style={{backgroundColor: 'red', padding: 10, zIndex: 10, borderRadius: 20}}
+            onPress={() => handleDeleteItem(item.id)}
+          >
+            <Text style={{color: 'white'}}>Delete</Text>
+          </TouchableOpacity> 
+        </View>
       </View>
     )
   }
+
   return(
     <View
       style={{
         flex: 1,
-        alignItems: 'center',
+        alignItems: 'flex-start',
         justifyContent: 'center',
       }}
     >
       <View>
-        <Text>保存リスト</Text>
+        <Text style={{fontSize: 20}}>保存リスト</Text>
         <FlatList
-          style={{flex :1, width: Dimensions.get('window').width , backgroundColor: '#ddd'}}
+          style={{flex :1, width: Dimensions.get('window').width,}}
           data={state.memoList}
           renderItem={renderItem}
           keyExtractor={(item, index) => 'row_' + item.id}
-          ItemSeparatorComponent={() => (
-            <View style={{width: '100%', height: 0.5, backgroundColor: '#000'}}/>
-          )}
+          ItemSeparatorComponent={() => <Separator/>}
         />
-        <Button title='clear' onPress={() => dispatch({TYPE: 'DATA_CLEAR'})}/>
+        {/* <Button title='clear' onPress={() => dispatch({TYPE: 'DATA_CLEAR'})}/> */}
       </View>
 
       <View
         style={{
           position: 'absolute',
-          bottom: 40,
-          right: 35,
+          bottom: 35,
+          right: 30,
         }}
       >
         <TouchableOpacity 
@@ -110,7 +155,7 @@ const HomeScreen = (params) => {
           }}
           onPress={() => navigation.navigate('Edit')}
         >
-          <Text style={{color: '#fff'}}>新規</Text>
+          <Text style={{color: '#fff'}}>New</Text>
         </TouchableOpacity>
       </View>
 
