@@ -126,8 +126,8 @@ const EditScreen = () => {
         }}
       >
         <TextInput
-          style={{width: window.width * 0.9, fontSize: 20, marginBottom: 8,}}
-          placeholder='title'
+          style={{width: window.width * 0.9, fontSize: 16, marginBottom: 8,}}
+          placeholder='メモタイトルを入力できます'
           onChangeText={(text) => handleChangeTitle(text)}
           value={item.title}
         />
@@ -137,14 +137,14 @@ const EditScreen = () => {
           onTouchEnd={handleTouchEnd}
           // onTouchCancel={handleTouchCancel}
           style={{
-            height: window.height * 0.75,
+            height: window.height * 0.7,
             width: window.width * 0.95,
           }}
         >
           <Svg
-            height={window.height * 0.75} 
+            height={window.height * 0.7} 
             width={window.width * 0.95}
-            viewBox={`0 0 ${window.width * 0.95} ${window.height * 0.75}`}
+            viewBox={`0 0 ${window.width * 0.95} ${window.height * 0.7}`}
             // style={{
             //   backgroundColor: '#c8cbca',
             //   borderColor: '#000',
@@ -155,7 +155,7 @@ const EditScreen = () => {
               x={0}
               y={0}
               width={window.width * 0.95}
-              height={window.height * 0.75}
+              height={window.height * 0.7}
               stroke="#000"
               strokeWidth="1"
               fill="#fff"
@@ -190,36 +190,73 @@ const EditScreen = () => {
       <View
         style={{
           flexDirection: 'row',
-          justifyContent: 'flex-end',
-          alignItems: 'flex-end',
-          marginRight: 20,
+          // alignItems: 'center',
+          justifyContent: 'space-around'
         }}
       >
-        <TouchableOpacity
+        <View
           style={{
-            padding: 10,
-            marginRight: 20,
-            width: 60,
-            alignItems: 'center',
-            backgroundColor: 'blue',
-            borderRadius: 5,
+            flexDirection: 'row',
+            alignSelf: 'flex-start',
+            justifyContent: 'center',
+            marginLeft: 20,
           }}
-          onPress={() => handleClearLine()}
         >
-          <Text style={{color: '#fff'}}>クリア</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
+          <TouchableOpacity
+            style={{
+              padding: 10,
+              marginRight: 20,
+              height: 40,
+              width: 70,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: 'green',
+              borderRadius: 5,
+            }}
+          >
+            <Text style={{color: '#fff'}}>設定</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View
           style={{
-            padding: 10,
-            width: 60,
-            alignItems: 'center',
-            backgroundColor: '#242424',
-            borderRadius: 5,
+            flexDirection: 'row',
+            alignSelf: 'flex-end',
+            justifyContent: 'center',
+            marginRight: 0,
           }}
-          onPress={() => handleSaveData()}
         >
-          <Text style={{color: '#fff'}}>保存</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              padding: 10,
+              marginRight: 20,
+              height: 40,
+              width: 70,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: 'blue',
+              borderRadius: 5,
+            }}
+            onPress={() => handleClearLine()}
+          >
+            <Text style={{color: '#fff'}}>クリア</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              padding: 10,
+              height: 40,
+              width: 70,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#242424',
+              borderRadius: 5,
+            }}
+            onPress={() => handleSaveData()}
+          >
+            <Text style={{color: '#fff'}}>保存</Text>
+          </TouchableOpacity>
+        </View>
+
       </View>
     </View>
   )

@@ -1,11 +1,13 @@
 import React , { useContext } from 'react';
 import { Text } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { FontAwesome } from '@expo/vector-icons';
 import { createStackNavigator, HeaderBackButton } from '@react-navigation/stack';
 
 import HomeScreen from '../Screen/Home';
 import EditScreen from '../Screen/Edit';
 import { AppContext } from '../Util/Common';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const StackNavigator = () => {
   const Stack = createStackNavigator();
@@ -20,7 +22,7 @@ const StackNavigator = () => {
         headerTintColor: '#fff',
         headerStyle: {
           backgroundColor: '#1974e0',
-          height: 60,
+          // height: 60,
         }
         
       }}
@@ -42,6 +44,13 @@ const StackNavigator = () => {
         options={{
           title: '編集', 
           headerBackTitle: 'close',
+          // headerLeft: (props) => (
+          //   <TouchableOpacity
+          //   >
+          //     <Text>{JSON.stringify(props)}</Text>
+          //     <FontAwesome name='arrow-down' size={30} color='#fff'/>
+          //   </TouchableOpacity>            
+          // ),
         }}
       />
     </Stack.Navigator>

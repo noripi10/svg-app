@@ -9,7 +9,7 @@ export const reducer = (state, action) => {
   let newMemoList = [];
 
   switch (action.TYPE){
-    case 'DATA_INIT_TEST' :
+    case 'DATA_INIT_FIRST' :
       storage.save({
         key: 'memoList',
         data: action.memoList

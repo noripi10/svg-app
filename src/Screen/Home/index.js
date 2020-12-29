@@ -2,6 +2,7 @@ import React, {useEffect, useContext} from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
+import { FontAwesome } from '@expo/vector-icons';
 import { AppContext, getDate, storage, getGuid } from '../../Util/Common';
 import TouchButton from '../../Elements/TouchButton';
 import Separator from '../../Elements/Separator';
@@ -68,7 +69,7 @@ const HomeScreen = (params) => {
       }catch(e){
         console.log(e);
         dispatch({
-          TYPE: 'DATA_INIT_TEST',
+          TYPE: 'DATA_INIT_FIRST',
           memoList: [],
         });
       }
@@ -87,7 +88,7 @@ const HomeScreen = (params) => {
     return (
       <View
         style={{
-          height: 50,
+          height: 60,
           width: Dimensions.get('window').width,
           alignItems: 'center',
           justifyContent: 'flex-start',
@@ -106,10 +107,10 @@ const HomeScreen = (params) => {
           style={{position: 'absolute', right : 10}}
         >
           <TouchableOpacity
-            style={{backgroundColor: 'red', padding: 10, zIndex: 10, borderRadius: 20}}
+            style={{backgroundColor: 'red', width: 45, alignItems: 'center', padding: 10, zIndex: 10, borderRadius: 5}}
             onPress={() => handleDeleteItem(item.id)}
           >
-            <Text style={{color: '#fff'}}>削除</Text>
+            <FontAwesome name='trash-o' size={20} color='#fff'/>
           </TouchableOpacity> 
         </View>
       </View>
@@ -135,19 +136,19 @@ const HomeScreen = (params) => {
       <View
         style={{
           position: 'absolute',
-          bottom: 50,
+          bottom: 60,
           right: 90,
           zIndex: 100,
         }}
       >
-        <Text style={{color: '#000', fontSize: 16}}>新規メモを作成してください →</Text>
+        <Text style={{color: '#000', fontSize: 16}}>新規メモを作成してください → </Text>
       </View>
     }        
       <View
         style={{
           position: 'absolute',
-          bottom: 35,
-          right: 30,
+          bottom: 45,
+          right: 35,
         }}
       >
         <TouchButton name='New' onPress={() => navigation.navigate('Edit')}/>
