@@ -1,10 +1,12 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useContext} from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
-import { useContext } from 'react';
+import { FontAwesome } from '@expo/vector-icons';
 import { AppContext, getDate, storage, getGuid } from '../../Util/Common';
+import TouchButton from '../../Elements/TouchButton';
 import Separator from '../../Elements/Separator';
+import style from './style';
 
 const HomeScreen = (params) => {
   const navigation = useNavigation();
@@ -98,9 +100,8 @@ const HomeScreen = (params) => {
         <TouchableOpacity
           onPress={() => {navigation.navigate('Edit', {item})}}
         >
-          <Text>{item.id} </Text>
-          <Text>{item.title}</Text>
-          <Text>{item.lastDate}</Text>
+          <Text style={{fontSize: 20, fontWeight: 'bold', marginBottom: 5}}>{item.title}</Text>
+          <Text style={{fontSize: 15, fontWeight: 'normal'}}>{item.lastDate}</Text>
         </TouchableOpacity>
         <View
           style={{position: 'absolute', right : 10}}
@@ -109,7 +110,7 @@ const HomeScreen = (params) => {
             style={{backgroundColor: 'red', padding: 10, zIndex: 10, borderRadius: 20}}
             onPress={() => handleDeleteItem(item.id)}
           >
-            <Text style={{color: 'white'}}>Delete</Text>
+            <FontAwesome name='trash-o' size={10} color='#fff'/>
           </TouchableOpacity> 
         </View>
       </View>
@@ -118,14 +119,11 @@ const HomeScreen = (params) => {
 
   return(
     <View
-      style={{
-        flex: 1,
-        alignItems: 'flex-start',
-        justifyContent: 'center',
-      }}
+      style={style.container}
     >
+    {state.memoList && state.memoList.length
+      ?
       <View>
-        <Text style={{fontSize: 20}}>保存リスト</Text>
         <FlatList
           style={{flex :1, width: Dimensions.get('window').width,}}
           data={state.memoList}
@@ -133,9 +131,19 @@ const HomeScreen = (params) => {
           keyExtractor={(item, index) => 'row_' + item.id}
           ItemSeparatorComponent={() => <Separator/>}
         />
-        {/* <Button title='clear' onPress={() => dispatch({TYPE: 'DATA_CLEAR'})}/> */}
       </View>
-
+      : 
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 50,
+          right: 90,
+          zIndex: 100,
+        }}
+      >
+        <Text style={{color: '#000', fontSize: 16}}>新規メモを作成してください →</Text>
+      </View>
+    }        
       <View
         style={{
           position: 'absolute',
@@ -143,20 +151,7 @@ const HomeScreen = (params) => {
           right: 30,
         }}
       >
-        <TouchableOpacity 
-          style={{
-            backgroundColor: '#d05d68',
-            width: 50,
-            height: 50,
-            borderRadius: 50,
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 100,
-          }}
-          onPress={() => navigation.navigate('Edit')}
-        >
-          <Text style={{color: '#fff'}}>New</Text>
-        </TouchableOpacity>
+        <TouchButton name='New' onPress={() => navigation.navigate('Edit')}/>
       </View>
 
     </View>

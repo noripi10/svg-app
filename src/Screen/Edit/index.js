@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
 import { View, Alert, useWindowDimensions, Button } from 'react-native';
-// import { Input } from 'react-native-elements';
-// import Icon from 'react-native-vector-icons/FontAwesome';
 import Svg, { Polyline, Rect, Circle } from 'react-native-svg';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { AppContext, getDate, getGuid, memoObject } from '../../Util/Common';
+import { TextInput } from 'react-native-gesture-handler';
+import style from './style';
 
 const EditScreen = () => {
   const {state, dispatch} = useContext(AppContext);
@@ -12,7 +12,6 @@ const EditScreen = () => {
   const [currentStroke, setCurrentStroke] = useState('#000');
   const [currentStrokeWidth, setCurrentStrokeWidth] = useState('2');
   const [currentPoints, setCurrentPoints] = useState([]);
-  const [points, setPoints] = useState([]);
   const refNew = useRef(true);
 
   const window = useWindowDimensions();
@@ -22,9 +21,9 @@ const EditScreen = () => {
   useEffect(() => {
     if(route.params){
       try{
-        const tmpItem = route.params.item;
+        const routeItem = route.params.item;
         refNew.current = false;
-        setItem(tmpItem);            
+        setItem(routeItem);            
       }catch(e){
         console.log(e);
         Alert.alert('データ取得エラー');
@@ -53,6 +52,7 @@ const EditScreen = () => {
           ...item.lineList,
           {
             key: getGuid(),
+            seq: item.lineList.length,
             stroke: currentStroke,
             strokeWidth: currentStrokeWidth,
             points: currentPoints,
@@ -66,12 +66,19 @@ const EditScreen = () => {
     setCurrentPoints([]);
   }
 
-  // const handleChangeTitle = (title) => {
-  //   setItem({
-  //     ...item,
-  //     title,
-  //   })
-  // }
+  const handleChangeTitle = (title) => {
+    setItem({
+      ...item,
+      title,
+    })
+  }
+
+  const handleClearLine = () => {
+    setItem({
+      ...item,
+      lineList: [],
+    });
+  }
 
   const handleSaveData = () => {
     dispatch({
@@ -79,6 +86,7 @@ const EditScreen = () => {
       INSERT: refNew.current,
       ITEM: {
         ...item,
+        id: refNew.current ? getGuid() : item.id,
         lastDate: getDate(),
       }
     });
@@ -106,32 +114,22 @@ const EditScreen = () => {
     }
     return '';
   }
+
   return(
     <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
+      style={style.container}
     >
       <View
         style={{
           alignItems: 'center',
         }}
       >
-        {/* <Input
-          style={{width: window.width * 0.9}}
+        <TextInput
+          style={{width: window.width * 0.9, fontSize: 20, marginBottom: 10,}}
           placeholder='title'
-          leftIcon={
-            <Icon
-              name='rocket'
-              size={24}
-              color='black'
-            />
-          }
-          
           onChangeText={(text) => handleChangeTitle(text)}
-        /> */}
+          value={item.title}
+        />
         <View
           onTouchMove={handleTouchMove}
           // onTouchStart={handleTouchStart}
@@ -194,7 +192,7 @@ const EditScreen = () => {
             alignItems: 'center',
           }}
         >
-          <Button title='clear polyline' onPress={() => setPoints([])}/>
+          <Button title='clear polyline' onPress={() => handleClearLine()}/>
           <Button title='save' onPress={() => handleSaveData()}/>
         </View>
 
