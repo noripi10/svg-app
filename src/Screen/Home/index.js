@@ -2,7 +2,6 @@ import React, {useEffect, useContext} from 'react';
 import { View, Text, Dimensions } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
-import { FontAwesome } from '@expo/vector-icons';
 import { AppContext, getDate, storage, getGuid } from '../../Util/Common';
 import TouchButton from '../../Elements/TouchButton';
 import Separator from '../../Elements/Separator';
@@ -110,7 +109,7 @@ const HomeScreen = (params) => {
             style={{backgroundColor: 'red', padding: 10, zIndex: 10, borderRadius: 20}}
             onPress={() => handleDeleteItem(item.id)}
           >
-            <FontAwesome name='trash-o' size={10} color='#fff'/>
+            <Text style={{color: '#fff'}}>削除</Text>
           </TouchableOpacity> 
         </View>
       </View>

@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
-import { View, Alert, useWindowDimensions, Button } from 'react-native';
+import { View, Alert, useWindowDimensions, Button, Text } from 'react-native';
 import Svg, { Polyline, Rect, Circle } from 'react-native-svg';
 import { useNavigation, useRoute } from '@react-navigation/native';
+// import  from '@expo/vector-icons';
 import { AppContext, getDate, getGuid, memoObject } from '../../Util/Common';
-import { TextInput } from 'react-native-gesture-handler';
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import style from './style';
 
 const EditScreen = () => {
@@ -125,7 +126,7 @@ const EditScreen = () => {
         }}
       >
         <TextInput
-          style={{width: window.width * 0.9, fontSize: 20, marginBottom: 10,}}
+          style={{width: window.width * 0.9, fontSize: 20, marginBottom: 8,}}
           placeholder='title'
           onChangeText={(text) => handleChangeTitle(text)}
           value={item.title}
@@ -185,17 +186,40 @@ const EditScreen = () => {
             />
           </Svg>
         </View>
-        <View
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'flex-end',
+          alignItems: 'flex-end',
+          marginRight: 20,
+        }}
+      >
+        <TouchableOpacity
           style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
+            padding: 10,
+            marginRight: 20,
+            width: 60,
             alignItems: 'center',
+            backgroundColor: 'blue',
+            borderRadius: 5,
           }}
+          onPress={() => handleClearLine()}
         >
-          <Button title='clear polyline' onPress={() => handleClearLine()}/>
-          <Button title='save' onPress={() => handleSaveData()}/>
-        </View>
-
+          <Text style={{color: '#fff'}}>クリア</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            padding: 10,
+            width: 60,
+            alignItems: 'center',
+            backgroundColor: '#242424',
+            borderRadius: 5,
+          }}
+          onPress={() => handleSaveData()}
+        >
+          <Text style={{color: '#fff'}}>保存</Text>
+        </TouchableOpacity>
       </View>
     </View>
   )
