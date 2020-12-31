@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
-import { View, Alert, useWindowDimensions, Button, Text } from 'react-native';
+import { View, Alert, useWindowDimensions, Text, Modal } from 'react-native';
 import Svg, { Polyline, Rect, Circle } from 'react-native-svg';
 import { useNavigation, useRoute } from '@react-navigation/native';
-// import  from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 import { AppContext, getDate, getGuid, memoObject } from '../../Util/Common';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import style from './style';
+import { useLayoutEffect } from 'react';
 
 const EditScreen = () => {
   const {state, dispatch} = useContext(AppContext);
@@ -13,6 +14,7 @@ const EditScreen = () => {
   const [currentStroke, setCurrentStroke] = useState('#000');
   const [currentStrokeWidth, setCurrentStrokeWidth] = useState('2');
   const [currentPoints, setCurrentPoints] = useState([]);
+  const [displayModal, setDisplayModal] = useState(false);
   const refNew = useRef(true);
 
   const window = useWindowDimensions();
@@ -43,6 +45,19 @@ const EditScreen = () => {
     const { locationX, locationY, touches } = event.nativeEvent;
     setCurrentPoints([...currentPoints, {x: locationX, y: locationY}]);
   }
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: (props) => (
+        <TouchableOpacity
+          style={{marginLeft: 15}}
+          onPress={() => navigation.goBack()}
+        >
+          <FontAwesome name='arrow-down' size={24} color='#fff'/>
+        </TouchableOpacity>            
+      ),
+    })
+  },[navigation, route]);
 
   const handleTouchEnd = (event) => {
     // 線一本を１オブジェクトとして保存
@@ -79,6 +94,16 @@ const EditScreen = () => {
       ...item,
       lineList: [],
     });
+  }
+
+  const handleBackOne = () => {
+    // const newLineList = item.lineList.pop();
+    // setItem({
+    //   ...item,
+    //   lineList:[
+    //     newLineList,
+    //   ]
+    // });
   }
 
   const handleSaveData = () => {
@@ -213,6 +238,7 @@ const EditScreen = () => {
               backgroundColor: 'green',
               borderRadius: 5,
             }}
+            onPress={() => setDisplayModal(true)}
           >
             <Text style={{color: '#fff'}}>設定</Text>
           </TouchableOpacity>
@@ -221,31 +247,47 @@ const EditScreen = () => {
         <View
           style={{
             flexDirection: 'row',
-            alignSelf: 'flex-end',
+            alignSelf: 'center',
             justifyContent: 'center',
-            marginRight: 0,
+            // marginRight: 0,
           }}
         >
           <TouchableOpacity
             style={{
               padding: 10,
-              marginRight: 20,
+              marginRight: 15,
               height: 40,
               width: 70,
               justifyContent: 'center',
               alignItems: 'center',
-              backgroundColor: 'blue',
+              backgroundColor: '#457af7',
               borderRadius: 5,
             }}
             onPress={() => handleClearLine()}
           >
-            <Text style={{color: '#fff'}}>クリア</Text>
+            <Text style={{color: '#fff'}}>全クリア</Text>
           </TouchableOpacity>
+          {/* <TouchableOpacity
+            style={{
+              padding: 10,
+              marginRight: 15,
+              height: 40,
+              width: 70,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#92ace7',
+              borderRadius: 5,
+            }}
+            onPress={() => handleBackOne()}
+          >
+            <Text style={{color: '#fff'}}>消しゴム</Text>
+          </TouchableOpacity> */}
           <TouchableOpacity
             style={{
               padding: 10,
               height: 40,
               width: 70,
+              marginRight: 15,
               justifyContent: 'center',
               alignItems: 'center',
               backgroundColor: '#242424',
@@ -258,6 +300,73 @@ const EditScreen = () => {
         </View>
 
       </View>
+
+      {/* settingModal */}
+      <Modal
+        animationType='slide'
+        visible={displayModal}
+        transparent={true}
+      >
+        <View
+          style={{
+            flex: 1,
+            margin: 10,
+            marginTop: '80%',
+            backgroundColor: '#e8f4e6',
+            borderRadius: 15,
+            padding: 5,
+            shadowColor: '#000',
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 0.25,
+            shadowRadius: 3.84,
+            elevation: 5,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Text>準備中。。。</Text>
+          <View
+            style={{
+              flexDirection: 'row',
+              margin: 10,
+              position: 'absolute',
+              right: 10,
+              bottom: 10,
+            }}
+          >
+            <TouchableOpacity
+              style={{
+                margin:5,
+                marginRight: 20,
+                width: 65,
+                padding:15,
+                alignItems: 'center',
+                backgroundColor: '#ddd',
+                borderRadius: 5,
+              }}
+              onPress={() => setDisplayModal(false)}
+            >
+              <Text>閉じる</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                margin:5,
+                width: 65,
+                padding:15,
+                alignItems: 'center',
+                backgroundColor: '#ddd',
+                borderRadius: 5,
+              }}
+              onPress={() => setDisplayModal(false)}
+            >
+              <Text>保存</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   )
 }

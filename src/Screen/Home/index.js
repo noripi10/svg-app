@@ -13,10 +13,11 @@ const HomeScreen = (params) => {
   const { state, dispatch } = useContext(AppContext);
 
   useEffect(() => {
-    const func = async() => {
+    let isUnmounted = false;
+    const funcInit = async() => {
       try{
         let result = await storage.load({key: 'memoList'});
-        if (result) {
+        if (!isUnmounted && result) {
           dispatch({
             TYPE: 'DATA_INIT',
             memoList: result,
@@ -68,13 +69,18 @@ const HomeScreen = (params) => {
 
       }catch(e){
         console.log(e);
-        dispatch({
-          TYPE: 'DATA_INIT_FIRST',
-          memoList: [],
-        });
+        if(!isUnmounted) {
+          dispatch({
+            TYPE: 'DATA_INIT_FIRST',
+            memoList: [],
+          });
+        }
       }
     }
-    func();
+    funcInit();
+
+    // cleanUp
+    return () => isUnmounted = true
   },[]);
 
   const handleDeleteItem = (id) => {
@@ -94,7 +100,7 @@ const HomeScreen = (params) => {
           justifyContent: 'flex-start',
           flexDirection: 'row',
           paddingLeft: 10,
-          backgroundColor: (index % 2 === 0  || index === 0) ? '#ccc' : '#eee',
+          backgroundColor: (index % 2 === 0  || index === 0) ? '#e2f8fe' : '#f5fdff',
         }}
       >
         <TouchableOpacity
@@ -107,7 +113,7 @@ const HomeScreen = (params) => {
           style={{position: 'absolute', right : 10}}
         >
           <TouchableOpacity
-            style={{backgroundColor: 'red', width: 45, alignItems: 'center', padding: 10, zIndex: 10, borderRadius: 5}}
+            style={{backgroundColor: '#f75d45', width: 45, alignItems: 'center', padding: 10, zIndex: 10, borderRadius: 5}}
             onPress={() => handleDeleteItem(item.id)}
           >
             <FontAwesome name='trash-o' size={20} color='#fff'/>
@@ -147,8 +153,8 @@ const HomeScreen = (params) => {
       <View
         style={{
           position: 'absolute',
-          bottom: 45,
-          right: 35,
+          bottom: 35,
+          right: 30,
         }}
       >
         <TouchButton name='New' onPress={() => navigation.navigate('Edit')}/>

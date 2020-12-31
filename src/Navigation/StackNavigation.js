@@ -44,13 +44,9 @@ const StackNavigator = () => {
         options={{
           title: '編集', 
           headerBackTitle: 'close',
-          // headerLeft: (props) => (
-          //   <TouchableOpacity
-          //   >
-          //     <Text>{JSON.stringify(props)}</Text>
-          //     <FontAwesome name='arrow-down' size={30} color='#fff'/>
-          //   </TouchableOpacity>            
-          // ),
+          headerStyle: {
+            backgroundColor: '#4576f7',
+          }
         }}
       />
     </Stack.Navigator>

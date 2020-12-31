@@ -1,17 +1,18 @@
-import React , { useEffect, useReducer } from 'react';
+import React , { useReducer } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { StyleSheet } from 'react-native';
+import { NavigationContainer, useTheme } from '@react-navigation/native';
 import BottomNavigator from './src/Navigation/BottomNavigation';
 import StackNavigator from './src/Navigation/StackNavigation';
 import { initState, reducer } from './src/Util/Reducer';
 import { AppContext } from './src/Util/Common';
 
 export default function App() {
+  const theme = useTheme();
   const [state, dispatch] = useReducer(reducer, initState);
   return (
     <AppContext.Provider value={{state, dispatch}}>
-      <NavigationContainer>
+      <NavigationContainer theme={theme}>
         <StackNavigator/>
         <StatusBar style="auto" />
       </NavigationContainer>  

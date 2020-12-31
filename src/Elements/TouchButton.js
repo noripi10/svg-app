@@ -15,9 +15,9 @@ const TouchButton = ({onPress, name, iconName}) => (
         width: 0,
         height: 2,
       },
-      shadowRadius: 0,
-      shadowOpacity: 1,
-      shadowColor: '#ccc',
+      shadowOpacity: 0.5,
+      shadowRadius: 4,
+      shadowColor: '#000',
       zIndex: 100,
     }}
     onPress={onPress}
