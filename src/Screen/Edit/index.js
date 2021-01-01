@@ -117,6 +117,7 @@ const EditScreen = () => {
       }
     });
     Alert.alert('保存しました');
+    navigation.goBack();
   }
 
   const getPointsString = (points) => {
