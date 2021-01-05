@@ -1,10 +1,11 @@
 import React, { useEffect, useState, useContext, useRef } from 'react';
-import { View, Alert, useWindowDimensions, Text, Modal } from 'react-native';
+import { View, Alert, useWindowDimensions, Text, Modal, Switch } from 'react-native';
 import Svg, { Polyline, Rect, Circle } from 'react-native-svg';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
 import { AppContext, getDate, getGuid, memoObject } from '../../Util/Common';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
+import Slider from '@react-native-community/slider';
 import style from './style';
 import { useLayoutEffect } from 'react';
 
@@ -12,9 +13,10 @@ const EditScreen = () => {
   const {state, dispatch} = useContext(AppContext);
   const [item, setItem] = useState(memoObject);
   const [currentStroke, setCurrentStroke] = useState('#000');
-  const [currentStrokeWidth, setCurrentStrokeWidth] = useState('2');
+  const [currentStrokeWidth, setCurrentStrokeWidth] = useState(2);
   const [currentPoints, setCurrentPoints] = useState([]);
   const [displayModal, setDisplayModal] = useState(false);
+  const [drawColor, setDrawColor] = useState('#000');
   const refNew = useRef(true);
 
   const window = useWindowDimensions();
@@ -229,16 +231,7 @@ const EditScreen = () => {
           }}
         >
           <TouchableOpacity
-            style={{
-              padding: 10,
-              marginRight: 20,
-              height: 40,
-              width: 70,
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: 'green',
-              borderRadius: 5,
-            }}
+            style={[style.button, {backgroundColor: 'green'}]}
             onPress={() => setDisplayModal(true)}
           >
             <Text style={{color: '#fff'}}>設定</Text>
@@ -254,16 +247,7 @@ const EditScreen = () => {
           }}
         >
           <TouchableOpacity
-            style={{
-              padding: 10,
-              marginRight: 15,
-              height: 40,
-              width: 70,
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: '#457af7',
-              borderRadius: 5,
-            }}
+            style={[style.button, {backgroundColor: '#457af7'}]}
             onPress={() => handleClearLine()}
           >
             <Text style={{color: '#fff'}}>全クリア</Text>
@@ -284,16 +268,7 @@ const EditScreen = () => {
             <Text style={{color: '#fff'}}>消しゴム</Text>
           </TouchableOpacity> */}
           <TouchableOpacity
-            style={{
-              padding: 10,
-              height: 40,
-              width: 70,
-              marginRight: 15,
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: '#242424',
-              borderRadius: 5,
-            }}
+            style={[style.button, {backgroundColor: '#242424'}]}
             onPress={() => handleSaveData()}
           >
             <Text style={{color: '#fff'}}>保存</Text>
@@ -308,27 +283,77 @@ const EditScreen = () => {
         visible={displayModal}
         transparent={true}
       >
-        <View
-          style={{
-            flex: 1,
-            margin: 10,
-            marginTop: '80%',
-            backgroundColor: '#e8f4e6',
-            borderRadius: 15,
-            padding: 5,
-            shadowColor: '#000',
-            shadowOffset: {
-              width: 0,
-              height: 2,
-            },
-            shadowOpacity: 0.25,
-            shadowRadius: 3.84,
-            elevation: 5,
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Text>準備中。。。</Text>
+        <View style={style.modalView}>
+          <Text style={{alignSelf: 'flex-start', margin: 15, marginLeft: 40, fontSize: 15,}}>・色選択</Text>
+          <View
+            style={{
+              width: 300,
+              padding: 5,
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-evenly',
+              alignItems: 'center',
+            }}
+          >
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >           
+              <Text>黒</Text>
+              <Switch
+                trackColor={{ false: '#000', true: '#000'}}
+                onValueChange={() => setCurrentStroke('#000')}
+                value={currentStroke === '#000' ? true : false}
+              />
+            </View>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Text>赤</Text>
+              <Switch
+                trackColor={{ false: '#000', true: 'red'}}
+                onValueChange={(preValue) => {              
+                  if(!preValue){
+                    setCurrentStroke('#000');
+                  } else {
+                    setCurrentStroke('red');
+                  }
+                }}
+                value={currentStroke === 'red' ? true : false}
+              />
+            </View>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Text>青</Text>
+              <Switch
+                trackColor={{ false: '#000', true: 'blue'}}
+                onValueChange={(preValue) => {
+                  if(!preValue){
+                    setCurrentStroke('#000');
+                  } else {
+                    setCurrentStroke('blue');
+                  }
+                }}
+                value={currentStroke === 'blue' ? true : false}
+              />
+            </View>
+          </View>
+
           <View
             style={{
               flexDirection: 'row',
@@ -339,23 +364,17 @@ const EditScreen = () => {
             }}
           >
             <TouchableOpacity
-              style={{
-                margin:5,
-                marginRight: 20,
-                width: 65,
-                padding:15,
-                alignItems: 'center',
-                backgroundColor: '#ddd',
-                borderRadius: 5,
-              }}
+              style={[style.button, {backgroundColor: '#bbb', marginBottom: 20}]}
               onPress={() => setDisplayModal(false)}
             >
               <Text>閉じる</Text>
             </TouchableOpacity>
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{
                 margin:5,
-                width: 65,
+                marginRight: 20,
+                marginBottom: 20,
+                width: 70,
                 padding:15,
                 alignItems: 'center',
                 backgroundColor: '#ddd',
@@ -364,8 +383,18 @@ const EditScreen = () => {
               onPress={() => setDisplayModal(false)}
             >
               <Text>保存</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
+          <Text style={{alignSelf: 'flex-start', margin: 15, marginTop:100, marginLeft: 40, fontSize: 15,}}>・太さ</Text>
+          <Slider
+            style={{width: '70%', height: 40,}}
+            minimumValue={1}
+            maximumValue={10}
+            step={1}
+            onSlidingComplete={(val) => setCurrentStrokeWidth(val)}
+            value={currentStrokeWidth}
+          />
+          <Text>{currentStrokeWidth}</Text>
         </View>
       </Modal>
     </View>

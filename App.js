@@ -13,6 +13,7 @@ export default function App() {
   return (
     <AppContext.Provider value={{state, dispatch}}>
       <NavigationContainer theme={theme}>
+        {/* <BottomNavigator/> */}
         <StackNavigator/>
         <StatusBar style="auto" />
       </NavigationContainer>  

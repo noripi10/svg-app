@@ -153,7 +153,7 @@ const HomeScreen = (params) => {
       <View
         style={{
           position: 'absolute',
-          bottom: 35,
+          bottom: 40,
           right: 30,
         }}
       >
