@@ -6,7 +6,7 @@ import { createStackNavigator, HeaderBackButton } from '@react-navigation/stack'
 
 import HomeScreen from '../Screen/Home';
 import EditScreen from '../Screen/Edit';
-import { AppContext } from '../Util/Common';
+import { AppContext } from '../Util/common';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const StackNavigator = () => {
@@ -34,7 +34,9 @@ const StackNavigator = () => {
         options={{
           title: 'メモ一覧',
           headerRight: (props) => (
-            <Text style={{color: props.tintColor ,fontSize: 16}}>{state.memoList.length} 件    </Text>
+            <Text style={{color: props.tintColor ,fontSize: 16, marginRight: 15}}>
+              <Text style={{color: props.tintColor ,fontSize: 22}}>{state.memoList.length}</Text> 件
+            </Text>
           ),
         }}
       />

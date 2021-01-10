@@ -1,16 +1,17 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
+import React, { useEffect, useState, useContext, useRef, useLayoutEffect } from 'react';
 import { View, Alert, useWindowDimensions, Text, Modal, Switch } from 'react-native';
 import Svg, { Polyline, Rect, Circle } from 'react-native-svg';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
-import { AppContext, getDate, getGuid, memoObject } from '../../Util/Common';
 import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 import Slider from '@react-native-community/slider';
+import { captureRef } from 'react-native-view-shot';
+import * as MediaLibrary from 'expo-media-library';
 import style from './style';
-import { useLayoutEffect } from 'react';
+import { AppContext, getDate, getGuid, getPixels, memoObject } from '../../Util/common';
 
 const EditScreen = () => {
-  const {state, dispatch} = useContext(AppContext);
+  const {state, dispatch, permission} = useContext(AppContext);
   const [item, setItem] = useState(memoObject);
   const [currentStroke, setCurrentStroke] = useState('#000');
   const [currentStrokeWidth, setCurrentStrokeWidth] = useState(2);
@@ -18,6 +19,7 @@ const EditScreen = () => {
   const [displayModal, setDisplayModal] = useState(false);
   const [drawColor, setDrawColor] = useState('#000');
   const refNew = useRef(true);
+  const refViewShot = useRef(null);
 
   const window = useWindowDimensions();
   const navigation = useNavigation();
@@ -70,6 +72,7 @@ const EditScreen = () => {
           ...item.lineList,
           {
             key: getGuid(),
+            // writeDate: new Date(),
             seq: item.lineList.length,
             stroke: currentStroke,
             strokeWidth: currentStrokeWidth,
@@ -99,7 +102,22 @@ const EditScreen = () => {
   }
 
   const handleBackOne = () => {
-    // const newLineList = item.lineList.pop();
+    // console.log(item);
+    // const newLineList = item.lineList.map(line => {
+    //   return {
+    //     line,
+    //     key: line.writeDate,
+    //   }
+    // }).sort((a, b) => {
+    //   if (a.key < b.key) {
+    //     return -1;
+    //   } else {
+    //     return 1;
+    //   }
+    // }).map(sortLine => {
+    //   return sortLine.line;
+    // }).pop();
+
     // setItem({
     //   ...item,
     //   lineList:[
@@ -120,6 +138,22 @@ const EditScreen = () => {
     });
     Alert.alert('保存しました');
     navigation.goBack();
+  }
+
+  const handleCature = async() => {
+    const pixels = getPixels();
+    const result = await captureRef(refViewShot, {
+      format: 'jpg',
+      quality: 1,
+      result: 'tmpfile',
+      height: pixels,
+      width: pixels,
+    });
+    console.log(result);
+    MediaLibrary.saveToLibraryAsync(result)
+      .then(() => {
+        Alert.alert('カメラロールにメモを保存しました。');
+      });
   }
 
   const getPointsString = (points) => {
@@ -153,13 +187,25 @@ const EditScreen = () => {
           alignItems: 'center',
         }}
       >
-        <TextInput
-          style={{width: window.width * 0.9, fontSize: 16, marginBottom: 8,}}
-          placeholder='メモタイトルを入力できます'
-          onChangeText={(text) => handleChangeTitle(text)}
-          value={item.title}
-        />
+        <View style={{width: window.width, flexDirection: 'row', justifyContent: 'flex-start' , alignItems: 'center', paddingLeft: 10}}>
+          <TextInput
+            style={{width: window.width * 0.8, fontSize: 16, marginBottom: 8}}
+            placeholder='メモタイトルを入力できます'
+            onChangeText={(text) => handleChangeTitle(text)}
+            value={item.title}
+          />
+          {permission &&
+            <TouchableOpacity
+              style={[style.button, {margin: 0, padding: 0}]}
+              onPress={() => handleCature()}
+            >
+              <FontAwesome name='save' color='#000' size={28}/>
+            </TouchableOpacity>
+          }
+        </View>
+
         <View
+          ref={refViewShot}
           onTouchMove={handleTouchMove}
           // onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
@@ -253,19 +299,10 @@ const EditScreen = () => {
             <Text style={{color: '#fff'}}>全クリア</Text>
           </TouchableOpacity>
           {/* <TouchableOpacity
-            style={{
-              padding: 10,
-              marginRight: 15,
-              height: 40,
-              width: 70,
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: '#92ace7',
-              borderRadius: 5,
-            }}
+            style={[style.button, {backgroundColor: '#92ace7'}]}
             onPress={() => handleBackOne()}
           >
-            <Text style={{color: '#fff'}}>消しゴム</Text>
+            <Text style={{color: '#fff'}}>戻す</Text>
           </TouchableOpacity> */}
           <TouchableOpacity
             style={[style.button, {backgroundColor: '#242424'}]}

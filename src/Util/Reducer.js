@@ -1,4 +1,4 @@
-import { storage } from './Common';
+import { storage } from './common';
 
 export const initState = {
   memoList: [],

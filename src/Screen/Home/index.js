@@ -3,7 +3,7 @@ import { View, Text, Dimensions } from 'react-native';
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
-import { AppContext, getDate, storage, getGuid } from '../../Util/Common';
+import { AppContext, getDate, storage, getGuid } from '../../Util/common';
 import TouchButton from '../../Elements/TouchButton';
 import Separator from '../../Elements/Separator';
 import style from './style';
