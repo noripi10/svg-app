@@ -20,7 +20,12 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.hiroapp.handwritten",
-      "buildNumber": "1.0.1"
+      "buildNumber": "1.0.4",
+      "infoPlist": {
+        "CFBundleDevelopmentRegion":"ja_JP",
+        "NSPhotoLibraryUsageDescription": "メモ画像を保存するためにフォトライブラリを使用します",
+        "NSPhotoLibraryAddUsageDescription": "メモ画像を保存するためにフォトライブラリを使用します"
+      }
     },
     "android": {
       "adaptiveIcon": {
