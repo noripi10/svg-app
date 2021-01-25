@@ -13,7 +13,7 @@ import {
   Modal,
   Switch,
 } from 'react-native';
-import Svg, {Polyline, Rect, Circle} from 'react-native-svg';
+import Svg, {Polyline, Rect} from 'react-native-svg';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {FontAwesome} from '@expo/vector-icons';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
@@ -27,9 +27,9 @@ import {
   getGuid,
   getPixels,
   memoObject,
-} from '../../Util/common';
+} from '../../Util/Common';
 
-const EditScreen = () => {
+export const EditScreen = () => {
   const {state, dispatch, permission} = useContext(AppContext);
   const [item, setItem] = useState(memoObject);
   const [currentStroke, setCurrentStroke] = useState('#000');
@@ -458,5 +458,3 @@ const EditScreen = () => {
     </View>
   );
 };
-
-export default EditScreen;

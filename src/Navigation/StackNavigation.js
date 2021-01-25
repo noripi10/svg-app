@@ -1,16 +1,14 @@
 import React, {useContext} from 'react';
 import {Text} from 'react-native';
-import {NavigationContainer, useNavigation} from '@react-navigation/native';
-import {FontAwesome} from '@expo/vector-icons';
-import {createStackNavigator, HeaderBackButton} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 
-import HomeScreen from '../Screen/Home';
-import EditScreen from '../Screen/Edit';
-import {AppContext} from '../Util/common';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {AppContext} from '../Util/Common';
+import {HomeScreen} from '../Screen/Home';
+import {EditScreen} from '../Screen/Edit';
 
-const StackNavigator = () => {
-  const Stack = createStackNavigator();
+const Stack = createStackNavigator();
+
+export const StackNavigator = () => {
   const {state} = useContext(AppContext);
 
   return (
@@ -56,5 +54,3 @@ const StackNavigator = () => {
     </Stack.Navigator>
   );
 };
-
-export default StackNavigator;
