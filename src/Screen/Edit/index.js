@@ -21,13 +21,8 @@ import Slider from '@react-native-community/slider';
 import {captureRef} from 'react-native-view-shot';
 import * as MediaLibrary from 'expo-media-library';
 import style from './style';
-import {
-  AppContext,
-  getDate,
-  getGuid,
-  getPixels,
-  memoObject,
-} from '../../Util/Common';
+import {getDate, getGuid, getPixels, memoObject} from '../../Util/Common';
+import {AppContext} from '../../Context/AppContext';
 
 export const EditScreen = () => {
   const {state, dispatch, permission} = useContext(AppContext);

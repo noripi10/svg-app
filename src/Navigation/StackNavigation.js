@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import {Text} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import {AppContext} from '../Util/Common';
+import {AppContext} from '../Context/AppContext';
 import {HomeScreen} from '../Screen/Home';
 import {EditScreen} from '../Screen/Edit';
 
@@ -14,13 +14,12 @@ export const StackNavigator = () => {
   return (
     <Stack.Navigator
       mode="modal"
-      headerMode="screen"
+      // headerMode="screen"
       initialRouteName="Home"
       screenOptions={{
         headerTintColor: '#fff',
         headerStyle: {
           backgroundColor: '#1974e0',
-          // height: 60,
         },
       }}
       HeaderBackButton={undefined}>
@@ -44,8 +43,7 @@ export const StackNavigator = () => {
         name="Edit"
         component={EditScreen}
         options={{
-          title: '編集',
-          headerBackTitle: 'close',
+          title: 'メモ編集',
           headerStyle: {
             backgroundColor: '#4576f7',
           },

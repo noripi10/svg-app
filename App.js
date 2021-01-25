@@ -1,7 +1,7 @@
 import React, {useReducer} from 'react';
 import {AppNavigator} from './src/Navigation/AppNavigator';
 import {initState, reducer} from './src/Util/Reducer';
-import {AppContext} from './src/Util/Common';
+import {AppContext} from './src/Context/AppContext';
 import {useCameraPermision} from './src/Util/Permission';
 
 export default function App() {

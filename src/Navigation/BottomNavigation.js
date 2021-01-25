@@ -4,7 +4,7 @@ import {FontAwesome} from '@expo/vector-icons';
 
 import HomeScreen from '../Screen/Home';
 import EditScreen from '../Screen/Edit';
-import {AppContext} from '../Util/common';
+import {AppContext} from '../Context/AppContext';
 
 const BottomNavigator = () => {
   const Tab = createBottomTabNavigator();

@@ -3,8 +3,6 @@ import Storage from 'react-native-storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {PixelRatio} from 'react-native';
 
-export const AppContext = React.createContext(null);
-
 export const storage = new Storage({
   storageBackend: AsyncStorage,
 });

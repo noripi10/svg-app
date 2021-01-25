@@ -1,12 +1,13 @@
 import React, {useEffect, useContext} from 'react';
 import {View, Text, Dimensions} from 'react-native';
-import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
+import {FlatList} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
-import {FontAwesome} from '@expo/vector-icons';
-import {AppContext, getDate, storage, getGuid} from '../../Util/Common';
+import {getDate, storage, getGuid} from '../../Util/Common';
 import TouchButton from '../../Elements/TouchButton';
 import Separator from '../../Elements/Separator';
+import {MemoListItem} from '../../Elements/MemoListItem';
 import style from './style';
+import {AppContext} from '../../Context/AppContext';
 
 export const HomeScreen = () => {
   const navigation = useNavigation();
@@ -28,7 +29,6 @@ export const HomeScreen = () => {
             memoList: [],
           });
         }
-
         // test_data
         const testList = [
           {
@@ -60,7 +60,6 @@ export const HomeScreen = () => {
             ],
           },
         ];
-
         // テストでデータ作成と登録
         // dispatch({
         //   TYPE: 'DATA_INIT_TEST',
@@ -78,7 +77,6 @@ export const HomeScreen = () => {
     };
     funcInit();
 
-    // cleanUp
     return () => (isUnmounted = true);
   }, []);
 
@@ -91,43 +89,12 @@ export const HomeScreen = () => {
 
   const renderItem = ({item, index}) => {
     return (
-      <View
-        style={{
-          height: 60,
-          width: Dimensions.get('window').width,
-          alignItems: 'center',
-          justifyContent: 'flex-start',
-          flexDirection: 'row',
-          paddingLeft: 10,
-          backgroundColor:
-            index % 2 === 0 || index === 0 ? '#e2f8fe' : '#f5fdff',
-        }}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('Edit', {item});
-          }}>
-          <Text style={{fontSize: 20, fontWeight: 'bold', marginBottom: 5}}>
-            {item.title}
-          </Text>
-          <Text style={{fontSize: 15, fontWeight: 'normal'}}>
-            {item.lastDate}
-          </Text>
-        </TouchableOpacity>
-        <View style={{position: 'absolute', right: 10}}>
-          <TouchableOpacity
-            style={{
-              backgroundColor: '#f75d45',
-              width: 45,
-              alignItems: 'center',
-              padding: 10,
-              zIndex: 10,
-              borderRadius: 5,
-            }}
-            onPress={() => handleDeleteItem(item.id)}>
-            <FontAwesome name="trash-o" size={20} color="#fff" />
-          </TouchableOpacity>
-        </View>
-      </View>
+      <MemoListItem
+        navigation={navigation}
+        item={item}
+        index={index}
+        handleDeleteItem={handleDeleteItem}
+      />
     );
   };
 
@@ -144,24 +111,13 @@ export const HomeScreen = () => {
           />
         </View>
       ) : (
-        <View
-          style={{
-            position: 'absolute',
-            bottom: 60,
-            right: 90,
-            zIndex: 100,
-          }}>
+        <View style={style.noDataMessageContainer}>
           <Text style={{color: '#000', fontSize: 16}}>
             新規メモを作成してください →{' '}
           </Text>
         </View>
       )}
-      <View
-        style={{
-          position: 'absolute',
-          bottom: 40,
-          right: 30,
-        }}>
+      <View style={style.newIconContainer}>
         <TouchButton name="New" onPress={() => navigation.navigate('Edit')} />
       </View>
     </View>
