@@ -1,21 +1,21 @@
 import React, {useEffect, useContext} from 'react';
-import { View, Text, Dimensions } from 'react-native';
-import { FlatList, TouchableOpacity } from 'react-native-gesture-handler';
-import { useNavigation } from '@react-navigation/native';
-import { FontAwesome } from '@expo/vector-icons';
-import { AppContext, getDate, storage, getGuid } from '../../Util/common';
+import {View, Text, Dimensions} from 'react-native';
+import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
+import {useNavigation} from '@react-navigation/native';
+import {FontAwesome} from '@expo/vector-icons';
+import {AppContext, getDate, storage, getGuid} from '../../Util/common';
 import TouchButton from '../../Elements/TouchButton';
 import Separator from '../../Elements/Separator';
 import style from './style';
 
 const HomeScreen = (params) => {
   const navigation = useNavigation();
-  const { state, dispatch } = useContext(AppContext);
+  const {state, dispatch} = useContext(AppContext);
 
   useEffect(() => {
     let isUnmounted = false;
-    const funcInit = async() => {
-      try{
+    const funcInit = async () => {
+      try {
         let result = await storage.load({key: 'memoList'});
         if (!isUnmounted && result) {
           dispatch({
@@ -43,7 +43,7 @@ const HomeScreen = (params) => {
               //   weight: 2,
               //   points: [],
               // },
-            ]
+            ],
           },
           {
             id: 'memo_' + getGuid(),
@@ -57,7 +57,7 @@ const HomeScreen = (params) => {
               //   weight: 2,
               //   points: [],
               // },
-            ]
+            ],
           },
         ];
 
@@ -66,29 +66,28 @@ const HomeScreen = (params) => {
         //   TYPE: 'DATA_INIT_TEST',
         //   memoList: testList,
         // });
-
-      }catch(e){
+      } catch (e) {
         console.log(e);
-        if(!isUnmounted) {
+        if (!isUnmounted) {
           dispatch({
             TYPE: 'DATA_INIT_FIRST',
             memoList: [],
           });
         }
       }
-    }
+    };
     funcInit();
 
     // cleanUp
-    return () => isUnmounted = true
-  },[]);
+    return () => (isUnmounted = true);
+  }, []);
 
   const handleDeleteItem = (id) => {
     dispatch({
       TYPE: 'ITEM_DELETE',
       ID: id,
     });
-  }
+  };
 
   const renderItem = ({item, index}) => {
     return (
@@ -100,68 +99,73 @@ const HomeScreen = (params) => {
           justifyContent: 'flex-start',
           flexDirection: 'row',
           paddingLeft: 10,
-          backgroundColor: (index % 2 === 0  || index === 0) ? '#e2f8fe' : '#f5fdff',
-        }}
-      >
+          backgroundColor:
+            index % 2 === 0 || index === 0 ? '#e2f8fe' : '#f5fdff',
+        }}>
         <TouchableOpacity
-          onPress={() => {navigation.navigate('Edit', {item})}}
-        >
-          <Text style={{fontSize: 20, fontWeight: 'bold', marginBottom: 5}}>{item.title}</Text>
-          <Text style={{fontSize: 15, fontWeight: 'normal'}}>{item.lastDate}</Text>
+          onPress={() => {
+            navigation.navigate('Edit', {item});
+          }}>
+          <Text style={{fontSize: 20, fontWeight: 'bold', marginBottom: 5}}>
+            {item.title}
+          </Text>
+          <Text style={{fontSize: 15, fontWeight: 'normal'}}>
+            {item.lastDate}
+          </Text>
         </TouchableOpacity>
-        <View
-          style={{position: 'absolute', right : 10}}
-        >
+        <View style={{position: 'absolute', right: 10}}>
           <TouchableOpacity
-            style={{backgroundColor: '#f75d45', width: 45, alignItems: 'center', padding: 10, zIndex: 10, borderRadius: 5}}
-            onPress={() => handleDeleteItem(item.id)}
-          >
-            <FontAwesome name='trash-o' size={20} color='#fff'/>
-          </TouchableOpacity> 
+            style={{
+              backgroundColor: '#f75d45',
+              width: 45,
+              alignItems: 'center',
+              padding: 10,
+              zIndex: 10,
+              borderRadius: 5,
+            }}
+            onPress={() => handleDeleteItem(item.id)}>
+            <FontAwesome name="trash-o" size={20} color="#fff" />
+          </TouchableOpacity>
         </View>
       </View>
-    )
-  }
+    );
+  };
 
-  return(
-    <View
-      style={style.container}
-    >
-    {state.memoList && state.memoList.length
-      ?
-      <View>
-        <FlatList
-          style={{flex :1, width: Dimensions.get('window').width,}}
-          data={state.memoList}
-          renderItem={renderItem}
-          keyExtractor={(item, index) => 'row_' + item.id}
-          ItemSeparatorComponent={() => <Separator/>}
-        />
-      </View>
-      : 
-      <View
-        style={{
-          position: 'absolute',
-          bottom: 60,
-          right: 90,
-          zIndex: 100,
-        }}
-      >
-        <Text style={{color: '#000', fontSize: 16}}>新規メモを作成してください → </Text>
-      </View>
-    }        
+  return (
+    <View style={style.container}>
+      {state.memoList && state.memoList.length ? (
+        <View>
+          <FlatList
+            style={{flex: 1, width: Dimensions.get('window').width}}
+            data={state.memoList}
+            renderItem={renderItem}
+            keyExtractor={(item, index) => 'row_' + item.id}
+            ItemSeparatorComponent={() => <Separator />}
+          />
+        </View>
+      ) : (
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 60,
+            right: 90,
+            zIndex: 100,
+          }}>
+          <Text style={{color: '#000', fontSize: 16}}>
+            新規メモを作成してください →{' '}
+          </Text>
+        </View>
+      )}
       <View
         style={{
           position: 'absolute',
           bottom: 40,
           right: 30,
-        }}
-      >
-        <TouchButton name='New' onPress={() => navigation.navigate('Edit')}/>
+        }}>
+        <TouchButton name="New" onPress={() => navigation.navigate('Edit')} />
       </View>
-
     </View>
-  )
-}
+  );
+};
 
 export default HomeScreen;

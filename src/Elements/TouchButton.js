@@ -1,9 +1,9 @@
 import React from 'react';
-import { Text } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {Text} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 const TouchButton = ({onPress, name, iconName}) => (
-  <TouchableOpacity 
+  <TouchableOpacity
     style={{
       backgroundColor: '#2473d6',
       width: 50,
@@ -20,10 +20,9 @@ const TouchButton = ({onPress, name, iconName}) => (
       shadowColor: '#000',
       zIndex: 100,
     }}
-    onPress={onPress}
-  >
+    onPress={onPress}>
     <Text style={{color: '#fff'}}>{name}</Text>
   </TouchableOpacity>
-)
+);
 
 export default TouchButton;
