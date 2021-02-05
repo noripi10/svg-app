@@ -1,4 +1,4 @@
-# SvgApp
+# svg-app
 
 ・memoObject
   {
