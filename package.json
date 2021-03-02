@@ -16,6 +16,8 @@
     "@react-navigation/native": "^5.8.10",
     "@react-navigation/stack": "^5.12.8",
     "expo": "^40.0.0",
+    "expo-ads-admob": "^8.4.0",
+    "expo-media-library": "~10.0.0",
     "expo-permissions": "^10.0.0",
     "expo-status-bar": "~1.0.3",
     "expo-updates": "^0.4.1",
@@ -29,8 +31,7 @@
     "react-native-storage": "^1.0.1",
     "react-native-svg": "12.1.0",
     "react-native-view-shot": "^3.1.2",
-    "react-native-web": "~0.13.12",
-    "expo-media-library": "~10.0.0"
+    "react-native-web": "~0.13.12"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0"

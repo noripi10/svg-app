@@ -2,9 +2,9 @@ import React, {useState, useEffect} from 'react';
 // import * as Permissions from 'expo-permissions';
 import * as MediaLibrary from 'expo-media-library';
 
-export const useCameraPermision = () => {
+export const useCameraPermission = () => {
   const [permission, setPermission] = useState(null);
-  const confilmPermision = async () => {
+  const confirmPermission = async () => {
     const {status} = await MediaLibrary.getPermissionsAsync();
     if (status === 'granted') {
       setPermission(true);
@@ -18,7 +18,7 @@ export const useCameraPermision = () => {
     }
   };
   useEffect(() => {
-    confilmPermision();
+    confirmPermission();
   }, []);
 
   return permission;

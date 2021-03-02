@@ -151,7 +151,7 @@ export const EditScreen = () => {
     navigation.goBack();
   };
 
-  const handleCature = async () => {
+  const handleCapture = async () => {
     const pixels = getPixels();
     const result = await captureRef(refViewShot, {
       format: 'jpg',
@@ -211,7 +211,7 @@ export const EditScreen = () => {
           {permission && (
             <TouchableOpacity
               style={[style.button, {margin: 0, padding: 0}]}
-              onPress={() => handleCature()}>
+              onPress={() => handleCapture()}>
               <FontAwesome name="save" color="#000" size={28} />
             </TouchableOpacity>
           )}

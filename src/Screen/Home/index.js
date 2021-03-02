@@ -2,16 +2,33 @@ import React, {useEffect, useContext} from 'react';
 import {View, Text, Dimensions} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
-import {getDate, storage, getGuid} from '../../Util/Common';
+import {AdMobBanner, AdMobInterstitial} from 'expo-ads-admob';
+
+import {AppContext} from '../../Context/AppContext';
 import TouchButton from '../../Elements/TouchButton';
 import Separator from '../../Elements/Separator';
 import {MemoListItem} from '../../Elements/MemoListItem';
+
+import {getDate, storage, getGuid} from '../../Util/Common';
 import style from './style';
-import {AppContext} from '../../Context/AppContext';
 
 export const HomeScreen = () => {
   const navigation = useNavigation();
   const {state, dispatch} = useContext(AppContext);
+
+  const navigateEditScreen = async () => {
+    if (state.memoList.length > 2) {
+      AdMobInterstitial.setAdUnitID(
+        __DEV__
+          ? 'ca-app-pub-3940256099942544/4411468910'
+          : 'ca-app-pub-7379270123809470/2598757300'
+      );
+      await AdMobInterstitial.requestAdAsync();
+      await AdMobInterstitial.showAdAsync();
+    }
+
+    navigation.navigate('Edit');
+  };
 
   useEffect(() => {
     let isUnmounted = false;
@@ -118,8 +135,19 @@ export const HomeScreen = () => {
         </View>
       )}
       <View style={style.newIconContainer}>
-        <TouchButton name="New" onPress={() => navigation.navigate('Edit')} />
+        <TouchButton name="New" onPress={navigateEditScreen} />
       </View>
+      <AdMobBanner
+        style={{position: 'absolute', bottom: 0}}
+        bannerSize="fullBanner"
+        adUnitID={
+          __DEV__
+            ? 'ca-app-pub-3940256099942544/2934735716' // test
+            : 'ca-app-pub-7379270123809470/3869103803'
+        }
+        servePersonalizedAds
+        onDidFailToReceiveAdWithError={(err) => console.log(err)}
+      />
     </View>
   );
 };

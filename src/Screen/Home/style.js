@@ -37,13 +37,13 @@ const style = StyleSheet.create({
   },
   noDataMessageContainer: {
     position: 'absolute',
-    bottom: 60,
+    bottom: 100,
     right: 90,
     zIndex: 100,
   },
   newIconContainer: {
     position: 'absolute',
-    bottom: 40,
+    bottom: 80,
     right: 30,
   },
 });

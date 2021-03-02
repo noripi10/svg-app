@@ -14,17 +14,18 @@
       "fallbackToCacheTimeout": 0,
       "checkAutomatically": "ON_LOAD"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.hiroapp.handwritten",
       "buildNumber": "1.0.4",
       "infoPlist": {
-        "CFBundleDevelopmentRegion":"ja_JP",
+        "CFBundleDevelopmentRegion": "ja_JP",
         "NSPhotoLibraryUsageDescription": "メモ画像を保存するためにフォトライブラリを使用します",
         "NSPhotoLibraryAddUsageDescription": "メモ画像を保存するためにフォトライブラリを使用します"
+      },
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-7379270123809470~4236128830"
       }
     },
     "android": {
@@ -32,7 +33,10 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.hiroapp.handwritten"
+      "package": "com.hiroapp.handwritten",
+      "config": {
+        "googleMobileAdsAppId": "ca-app-pub-7379270123809470~4236128830"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
