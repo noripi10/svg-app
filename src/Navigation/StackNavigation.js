@@ -23,22 +23,7 @@ export const StackNavigator = () => {
         },
       }}
       HeaderBackButton={undefined}>
-      <Stack.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          title: 'メモ一覧',
-          headerRight: (props) => (
-            <Text
-              style={{color: props.tintColor, fontSize: 16, marginRight: 15}}>
-              <Text style={{color: props.tintColor, fontSize: 22}}>
-                {state.memoList.length}
-              </Text>{' '}
-              件
-            </Text>
-          ),
-        }}
-      />
+      <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen
         name="Edit"
         component={EditScreen}

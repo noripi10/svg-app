@@ -3,7 +3,8 @@ import {StyleSheet} from 'react-native';
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'space-evenly',
+    justifyContent: 'flex-start',
+    paddingVertical: 16,
   },
   modalView: {
     flex: 1,
@@ -26,10 +27,8 @@ const style = StyleSheet.create({
     elevation: 5,
   },
   button: {
-    padding: 10,
-    marginRight: 20,
     height: 40,
-    width: 70,
+    width: 75,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,

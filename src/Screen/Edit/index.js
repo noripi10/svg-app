@@ -23,9 +23,11 @@ import * as MediaLibrary from 'expo-media-library';
 import style from './style';
 import {getDate, getGuid, getPixels, memoObject} from '../../Util/Common';
 import {AppContext} from '../../Context/AppContext';
+import {useCallback} from 'react';
 
 export const EditScreen = () => {
   const {state, dispatch, permission} = useContext(AppContext);
+  const [changed, setChanged] = useState(false);
   const [item, setItem] = useState(memoObject);
   const [currentStroke, setCurrentStroke] = useState('#000');
   const [currentStrokeWidth, setCurrentStrokeWidth] = useState(2);
@@ -46,7 +48,6 @@ export const EditScreen = () => {
         refNew.current = false;
         setItem(routeItem);
       } catch (e) {
-        console.log(e);
         Alert.alert('データ取得エラー');
         navigation.goBack();
       }
@@ -68,12 +69,31 @@ export const EditScreen = () => {
       headerLeft: (props) => (
         <TouchableOpacity
           style={{marginLeft: 15}}
-          onPress={() => navigation.goBack()}>
+          onPress={() => navigationGoBack()}>
           <FontAwesome name="arrow-down" size={24} color="#fff" />
         </TouchableOpacity>
       ),
     });
-  }, [navigation, route]);
+  }, [navigation, route, changed]);
+
+  const navigationGoBack = useCallback(() => {
+    if (changed) {
+      Alert.alert('内容が変更されています', '変更を破棄しますか？', [
+        {
+          text: 'いいえ',
+          onPress: undefined,
+          style: 'cancel',
+        },
+        {
+          text: 'はい',
+          onPress: () => navigation.goBack(),
+          style: 'default',
+        },
+      ]);
+    } else {
+      navigation.goBack();
+    }
+  }, [changed]);
 
   const handleTouchEnd = (event) => {
     // 線一本を１オブジェクトとして保存
@@ -92,6 +112,7 @@ export const EditScreen = () => {
           },
         ],
       });
+      setChanged(true);
     } catch (e) {
       console.log('error', e);
     }
@@ -104,6 +125,7 @@ export const EditScreen = () => {
       ...item,
       title,
     });
+    setChanged(true);
   };
 
   const handleClearLine = () => {
@@ -111,6 +133,7 @@ export const EditScreen = () => {
       ...item,
       lineList: [],
     });
+    setChanged(true);
   };
 
   const handleBackOne = () => {
@@ -160,7 +183,6 @@ export const EditScreen = () => {
       height: pixels,
       width: pixels,
     });
-    console.log(result);
     MediaLibrary.saveToLibraryAsync(result).then(() => {
       Alert.alert('カメラロールにメモを保存しました。');
     });
@@ -193,6 +215,7 @@ export const EditScreen = () => {
       <View
         style={{
           alignItems: 'center',
+          marginBottom: 16,
         }}>
         <View
           style={{
@@ -277,7 +300,6 @@ export const EditScreen = () => {
       <View
         style={{
           flexDirection: 'row',
-          // alignItems: 'center',
           justifyContent: 'space-around',
         }}>
         <View
@@ -285,7 +307,7 @@ export const EditScreen = () => {
             flexDirection: 'row',
             alignSelf: 'flex-start',
             justifyContent: 'center',
-            marginLeft: 20,
+            marginLeft: 16,
           }}>
           <TouchableOpacity
             style={[style.button, {backgroundColor: 'green'}]}
@@ -299,13 +321,13 @@ export const EditScreen = () => {
             flexDirection: 'row',
             alignSelf: 'center',
             justifyContent: 'center',
-            // marginRight: 0,
           }}>
           <TouchableOpacity
             style={[style.button, {backgroundColor: '#457af7'}]}
             onPress={() => handleClearLine()}>
             <Text style={{color: '#fff'}}>全クリア</Text>
           </TouchableOpacity>
+          <View style={{marginHorizontal: 10}} />
           {/* <TouchableOpacity
             style={[style.button, {backgroundColor: '#92ace7'}]}
             onPress={() => handleBackOne()}

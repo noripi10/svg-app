@@ -2,7 +2,7 @@ import React, {useEffect, useContext} from 'react';
 import {View, Text, Dimensions} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
-import {AdMobBanner, AdMobInterstitial} from 'expo-ads-admob';
+import {AdMobBanner, AdMobInterstitial, AdMobRewarded} from 'expo-ads-admob';
 
 import {AppContext} from '../../Context/AppContext';
 import TouchButton from '../../Elements/TouchButton';
@@ -17,18 +17,31 @@ export const HomeScreen = () => {
   const {state, dispatch} = useContext(AppContext);
 
   const navigateEditScreen = async () => {
-    if (state.memoList.length > 2) {
-      AdMobInterstitial.setAdUnitID(
+    if (state.memoList.length) {
+      AdMobRewarded.setAdUnitID(
         __DEV__
-          ? 'ca-app-pub-3940256099942544/4411468910'
-          : 'ca-app-pub-7379270123809470/2598757300'
+          ? 'ca-app-pub-3940256099942544/1712485313'
+          : 'ca-app-pub-7379270123809470/6330724967'
       );
-      await AdMobInterstitial.requestAdAsync();
-      await AdMobInterstitial.showAdAsync();
+      await AdMobRewarded.requestAdAsync();
+      await AdMobRewarded.showAdAsync();
     }
 
     navigation.navigate('Edit');
   };
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: 'メモ一覧',
+      headerRight: () => {
+        return (
+          <Text style={{color: '#fff', marginRight: 16}}>
+            <Text style={{fontSize: 20}}>{state.memoList.length || 0}</Text> 件
+          </Text>
+        );
+      },
+    });
+  }, [state]);
 
   useEffect(() => {
     let isUnmounted = false;
