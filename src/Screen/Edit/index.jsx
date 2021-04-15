@@ -4,6 +4,7 @@ import React, {
   useContext,
   useRef,
   useLayoutEffect,
+  useCallback,
 } from 'react';
 import {
   View,
@@ -20,10 +21,12 @@ import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import Slider from '@react-native-community/slider';
 import {captureRef} from 'react-native-view-shot';
 import * as MediaLibrary from 'expo-media-library';
-import style from './style';
+
 import {getDate, getGuid, getPixels, memoObject} from '../../Util/Common';
 import {AppContext} from '../../Context/AppContext';
-import {useCallback} from 'react';
+import {SwitchItem} from '../../Elements/SwitchItem';
+
+import style from './style';
 
 export const EditScreen = () => {
   const {state, dispatch, permission} = useContext(AppContext);
@@ -59,11 +62,6 @@ export const EditScreen = () => {
     return unsubscribe;
   }, [navigation]);
 
-  const handleTouchMove = (event) => {
-    const {locationX, locationY, touches} = event.nativeEvent;
-    setCurrentPoints([...currentPoints, {x: locationX, y: locationY}]);
-  };
-
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: (props) => (
@@ -94,6 +92,11 @@ export const EditScreen = () => {
       navigation.goBack();
     }
   }, [changed]);
+
+  const handleTouchMove = (event) => {
+    const {locationX, locationY, touches} = event.nativeEvent;
+    setCurrentPoints([...currentPoints, {x: locationX, y: locationY}]);
+  };
 
   const handleTouchEnd = (event) => {
     // 線一本を１オブジェクトとして保存
@@ -215,21 +218,16 @@ export const EditScreen = () => {
 
   return (
     <View style={style.container}>
-      <View
-        style={{
-          alignItems: 'center',
-          marginBottom: 16,
-        }}>
+      <View style={style.subContainer}>
         <View
-          style={{
-            width: window.width,
-            flexDirection: 'row',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            paddingLeft: 10,
-          }}>
+          style={[
+            style.titleContainer,
+            {
+              width: window.width,
+            },
+          ]}>
           <TextInput
-            style={{width: window.width * 0.8, fontSize: 16, marginBottom: 8}}
+            style={[style.textInput, {width: window.width * 0.8}]}
             placeholder="メモタイトルを入力できます"
             onChangeText={(text) => handleChangeTitle(text)}
             value={item.title}
@@ -274,13 +272,6 @@ export const EditScreen = () => {
             />
             {/* <Circle cx={window.width / 2} cy={window.height / 2} r="45" stroke="blue" strokeWidth="2.5" fill="#2272bf" /> */}
 
-            {/* <Polyline
-              fill='none'
-              stroke='#000'
-              strokeWidth='3'
-              points={getStringPoints()}
-            /> */}
-
             {item.lineList &&
               item.lineList.map((line, i) => (
                 <Polyline
@@ -300,11 +291,7 @@ export const EditScreen = () => {
           </Svg>
         </View>
       </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-        }}>
+      <View style={style.settingContainer}>
         <View
           style={{
             flexDirection: 'row',
@@ -345,125 +332,15 @@ export const EditScreen = () => {
         </View>
       </View>
 
-      {/* settingModal */}
       <Modal animationType="slide" visible={displayModal} transparent={true}>
         <View style={style.modalView}>
-          <Text
-            style={{
-              alignSelf: 'flex-start',
-              margin: 15,
-              marginLeft: 40,
-              fontSize: 15,
-            }}>
-            ・色選択
-          </Text>
-          <View
-            style={{
-              width: 300,
-              padding: 5,
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-evenly',
-              alignItems: 'center',
-            }}>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Text>黒</Text>
-              <Switch
-                trackColor={{false: '#000', true: '#000'}}
-                onValueChange={() => setCurrentStroke('#000')}
-                value={currentStroke === '#000' ? true : false}
-              />
-            </View>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Text>赤</Text>
-              <Switch
-                trackColor={{false: '#000', true: 'red'}}
-                onValueChange={(preValue) => {
-                  if (!preValue) {
-                    setCurrentStroke('#000');
-                  } else {
-                    setCurrentStroke('red');
-                  }
-                }}
-                value={currentStroke === 'red' ? true : false}
-              />
-            </View>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Text>青</Text>
-              <Switch
-                trackColor={{false: '#000', true: 'blue'}}
-                onValueChange={(preValue) => {
-                  if (!preValue) {
-                    setCurrentStroke('#000');
-                  } else {
-                    setCurrentStroke('blue');
-                  }
-                }}
-                value={currentStroke === 'blue' ? true : false}
-              />
-            </View>
+          <Text style={style.modalTitle}>・色選択</Text>
+          <View style={style.modalSwitchContainer}>
+            <SwitchItem color="#000" {...{currentStroke, setCurrentStroke}} />
+            <SwitchItem color="red" {...{currentStroke, setCurrentStroke}} />
+            <SwitchItem color="blue" {...{currentStroke, setCurrentStroke}} />
           </View>
-
-          <View
-            style={{
-              flexDirection: 'row',
-              margin: 10,
-              position: 'absolute',
-              right: 10,
-              bottom: 10,
-            }}>
-            <TouchableOpacity
-              style={[
-                style.button,
-                {backgroundColor: '#bbb', marginBottom: 20},
-              ]}
-              onPress={() => setDisplayModal(false)}>
-              <Text>閉じる</Text>
-            </TouchableOpacity>
-            {/* <TouchableOpacity
-              style={{
-                margin:5,
-                marginRight: 20,
-                marginBottom: 20,
-                width: 70,
-                padding:15,
-                alignItems: 'center',
-                backgroundColor: '#ddd',
-                borderRadius: 5,
-              }}
-              onPress={() => setDisplayModal(false)}
-            >
-              <Text>保存</Text>
-            </TouchableOpacity> */}
-          </View>
-          <Text
-            style={{
-              alignSelf: 'flex-start',
-              margin: 15,
-              marginTop: 100,
-              marginLeft: 40,
-              fontSize: 15,
-            }}>
-            ・太さ
-          </Text>
+          <Text style={style.modalTitle}>・太さ</Text>
           <Slider
             style={{width: '70%', height: 40}}
             minimumValue={1}
@@ -473,6 +350,16 @@ export const EditScreen = () => {
             value={currentStrokeWidth}
           />
           <Text>{currentStrokeWidth}</Text>
+          <View style={style.modalCloseContainer}>
+            <TouchableOpacity
+              style={[
+                style.button,
+                {backgroundColor: '#bbb', marginBottom: 20},
+              ]}
+              onPress={() => setDisplayModal(false)}>
+              <Text>閉じる</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </Modal>
     </View>
