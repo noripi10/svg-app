@@ -118,14 +118,7 @@ export const HomeScreen = () => {
   };
 
   const renderItem = ({item, index}) => {
-    return (
-      <MemoListItem
-        navigation={navigation}
-        item={item}
-        index={index}
-        handleDeleteItem={handleDeleteItem}
-      />
-    );
+    return <MemoListItem {...{navigation, item, index, handleDeleteItem}} />;
   };
 
   return (

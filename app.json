@@ -2,7 +2,7 @@
   "expo": {
     "name": "メモリス",
     "slug": "SvgApp",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -18,7 +18,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.hiroapp.handwritten",
-      "buildNumber": "1.0.4",
+      "buildNumber": "1.0.5",
       "infoPlist": {
         "CFBundleDevelopmentRegion": "ja_JP",
         "NSPhotoLibraryUsageDescription": "メモ画像を保存するためにフォトライブラリを使用します",

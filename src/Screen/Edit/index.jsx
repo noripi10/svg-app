@@ -129,11 +129,14 @@ export const EditScreen = () => {
   };
 
   const handleClearLine = () => {
+    const prevLineList = item.lineList.length || 0;
     setItem({
       ...item,
       lineList: [],
     });
-    setChanged(true);
+    if (prevLineList !== 0) {
+      setChanged(true);
+    }
   };
 
   const handleBackOne = () => {
