@@ -5,7 +5,9 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "generate-license": "npx license-ls --depth=0 --prod --format=json > './src/assets/license.json'",
+    "postinstall": "yarn generate-license"
   },
   "dependencies": {
     "@expo/vector-icons": "^12.0.0",

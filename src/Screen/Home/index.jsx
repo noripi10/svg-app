@@ -1,5 +1,5 @@
 import React, {useEffect, useContext} from 'react';
-import {View, Text, Dimensions} from 'react-native';
+import {View, Text, Dimensions, TouchableOpacity} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import {AdMobBanner, AdMobInterstitial, AdMobRewarded} from 'expo-ads-admob';
@@ -40,6 +40,11 @@ export const HomeScreen = () => {
           </Text>
         );
       },
+      headerLeft: () => (
+        <TouchableOpacity onPress={() => navigation.navigate('License')}>
+          <Text style={{color: '#fff'}}>{'　使用パッケージ'}</Text>
+        </TouchableOpacity>
+      ),
     });
   }, [state]);
 

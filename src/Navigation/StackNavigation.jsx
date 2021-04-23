@@ -5,6 +5,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {AppContext} from '../Context/AppContext';
 import {HomeScreen} from '../Screen/Home';
 import {EditScreen} from '../Screen/Edit';
+import {LicenseScreen} from '../Screen/License';
 
 const Stack = createStackNavigator();
 
@@ -31,6 +32,16 @@ export const StackNavigator = () => {
           title: 'メモ編集',
           headerStyle: {
             backgroundColor: '#4576f7',
+          },
+        }}
+      />
+      <Stack.Screen
+        name="License"
+        component={LicenseScreen}
+        options={{
+          title: '使用パッケージ一覧',
+          headerStyle: {
+            backgroundColor: '#212122',
           },
         }}
       />
