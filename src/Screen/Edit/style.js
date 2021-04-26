@@ -25,11 +25,11 @@ const style = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     margin: 20,
-    marginTop: '75%',
+    marginTop: '85%',
     marginBottom: '13%',
     paddingTop: 35,
     backgroundColor: '#bce4f1',
-    borderRadius: 15,
+    borderRadius: 12,
     padding: 5,
     shadowColor: '#000',
     shadowOffset: {

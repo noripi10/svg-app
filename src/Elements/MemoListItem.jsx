@@ -64,7 +64,7 @@ const style = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     zIndex: 10,
-    borderRadius: 5,
+    borderRadius: 12,
   },
   noDataMessageContainer: {
     position: 'absolute',

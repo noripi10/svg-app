@@ -336,13 +336,30 @@ export const EditScreen = () => {
         <View style={style.modalView}>
           <Text style={style.modalTitle}>・色選択</Text>
           <View style={style.modalSwitchContainer}>
-            <SwitchItem color="#000" {...{currentStroke, setCurrentStroke}} />
-            <SwitchItem color="red" {...{currentStroke, setCurrentStroke}} />
-            <SwitchItem color="blue" {...{currentStroke, setCurrentStroke}} />
+            <SwitchItem
+              name="黒"
+              color="#000"
+              {...{currentStroke, setCurrentStroke}}
+            />
+            <SwitchItem
+              name="赤"
+              color="red"
+              {...{currentStroke, setCurrentStroke}}
+            />
+            <SwitchItem
+              name="青"
+              color="blue"
+              {...{currentStroke, setCurrentStroke}}
+            />
+            <SwitchItem
+              name="緑"
+              color="green"
+              {...{currentStroke, setCurrentStroke}}
+            />
           </View>
           <Text style={style.modalTitle}>・太さ</Text>
           <Slider
-            style={{width: '70%', height: 40}}
+            style={{width: '80%', height: 40}}
             minimumValue={1}
             maximumValue={10}
             step={1}

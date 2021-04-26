@@ -1,5 +1,12 @@
-import React, {useEffect, useContext} from 'react';
-import {View, Text, Dimensions, TouchableOpacity} from 'react-native';
+import React, {useEffect, useContext, useRef} from 'react';
+import {
+  View,
+  Text,
+  Dimensions,
+  Animated,
+  InteractionManager,
+  Alert,
+} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
 import {AdMobBanner, AdMobInterstitial, AdMobRewarded} from 'expo-ads-admob';
@@ -13,21 +20,38 @@ import {getDate, storage, getGuid} from '../../Util/Common';
 import style from './style';
 
 export const HomeScreen = () => {
-  const navigation = useNavigation();
+  const animationValue = useRef(new Animated.Value(0)).current;
+
   const {state, dispatch} = useContext(AppContext);
 
-  const navigateEditScreen = async () => {
-    if (state.memoList.length) {
-      AdMobRewarded.setAdUnitID(
-        __DEV__
-          ? 'ca-app-pub-3940256099942544/1712485313'
-          : 'ca-app-pub-7379270123809470/6330724967'
-      );
-      await AdMobRewarded.requestAdAsync();
-      await AdMobRewarded.showAdAsync();
-    }
+  const navigation = useNavigation();
 
-    navigation.navigate('Edit');
+  const navigateEditScreen = async () => {
+    animationValue.setValue(0);
+    Animated.timing(animationValue, {
+      toValue: 1,
+      duration: 200,
+      useNativeDriver: false,
+    }).start();
+
+    InteractionManager.runAfterInteractions(async () => {
+      if (state.memoList.length % 2 !== 0) {
+        AdMobRewarded.setAdUnitID(
+          __DEV__
+            ? 'ca-app-pub-3940256099942544/1712485313'
+            : 'ca-app-pub-7379270123809470/6330724967'
+        );
+        await AdMobRewarded.requestAdAsync();
+        await AdMobRewarded.showAdAsync();
+      }
+      navigation.navigate('Edit');
+      await new Promise((resolve) => {
+        setTimeout(() => {
+          animationValue.setValue(0);
+          resolve('ok');
+        }, 1500);
+      });
+    });
   };
 
   useEffect(() => {
@@ -40,11 +64,11 @@ export const HomeScreen = () => {
           </Text>
         );
       },
-      headerLeft: () => (
-        <TouchableOpacity onPress={() => navigation.navigate('License')}>
-          <Text style={{color: '#fff'}}>{'　使用パッケージ'}</Text>
-        </TouchableOpacity>
-      ),
+      // headerLeft: () => (
+      //   <TouchableOpacity onPress={() => navigation.navigate('License')}>
+      //     <Text style={{color: '#fff'}}>{'　使用パッケージ'}</Text>
+      //   </TouchableOpacity>
+      // ),
     });
   }, [state]);
 
@@ -116,10 +140,22 @@ export const HomeScreen = () => {
   }, []);
 
   const handleDeleteItem = (id) => {
-    dispatch({
-      TYPE: 'ITEM_DELETE',
-      ID: id,
-    });
+    Alert.alert('削除しますか？', '', [
+      {
+        text: 'いいえ',
+        onPress: undefined,
+        style: 'cancel',
+      },
+      {
+        text: 'はい',
+        onPress: () =>
+          dispatch({
+            TYPE: 'ITEM_DELETE',
+            ID: id,
+          }),
+        style: 'default',
+      },
+    ]);
   };
 
   const renderItem = ({item, index}) => {
@@ -146,7 +182,11 @@ export const HomeScreen = () => {
         </View>
       )}
       <View style={style.newIconContainer}>
-        <TouchButton name="New" onPress={navigateEditScreen} />
+        <TouchButton
+          name="New"
+          onPress={navigateEditScreen}
+          animationValue={animationValue}
+        />
       </View>
       <AdMobBanner
         style={{position: 'absolute', bottom: 0}}

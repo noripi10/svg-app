@@ -1,11 +1,12 @@
 import React from 'react';
 import {View, Text, Switch, StyleSheet} from 'react-native';
 
-export const SwitchItem = ({color, currentStroke, setCurrentStroke}) => {
+export const SwitchItem = ({name, color, currentStroke, setCurrentStroke}) => {
   return (
     <View style={styles.container}>
-      <Text>赤</Text>
+      <Text>{name}</Text>
       <Switch
+        style={styles.switch}
         trackColor={{false: '#000', true: color}}
         onValueChange={(preValue) => {
           if (!preValue) {
@@ -26,5 +27,9 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  switch: {
+    marginTop: 6,
+    marginBottom: 16,
   },
 });
