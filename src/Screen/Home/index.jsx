@@ -147,28 +147,29 @@ export const HomeScreen = () => {
   };
 
   return (
-    <View style={style.container}>
-      {state.memoList && state.memoList.length ? (
-        <View>
-          <FlatList
-            style={{flex: 1, width: Dimensions.get('window').width}}
-            data={state.memoList}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => 'row_' + item.id}
-            ItemSeparatorComponent={() => <Separator />}
-          />
+    <>
+      <View style={style.container}>
+        {state.memoList && state.memoList.length ? (
+          <View>
+            <FlatList
+              style={{flex: 1, width: Dimensions.get('window').width}}
+              data={state.memoList}
+              renderItem={renderItem}
+              keyExtractor={(item, index) => 'row_' + item.id}
+              ItemSeparatorComponent={() => <Separator />}
+            />
+          </View>
+        ) : (
+          <View style={style.noDataMessageContainer}>
+            <Text style={{color: '#000', fontSize: 16}}>新規メモを作成してください → </Text>
+          </View>
+        )}
+        <View style={style.newIconContainer}>
+          <TouchButton name="New" onPress={navigateEditScreen} animationValue={animationValue} />
         </View>
-      ) : (
-        <View style={style.noDataMessageContainer}>
-          <Text style={{color: '#000', fontSize: 16}}>新規メモを作成してください → </Text>
-        </View>
-      )}
-      <View style={style.newIconContainer}>
-        <TouchButton name="New" onPress={navigateEditScreen} animationValue={animationValue} />
       </View>
       <AdMobBanner
-        style={{position: 'absolute', bottom: 0}}
-        bannerSize="fullBanner"
+        bannerSize="smartBannerPortrait"
         adUnitID={
           __DEV__
             ? 'ca-app-pub-3940256099942544/2934735716' // test
@@ -177,6 +178,6 @@ export const HomeScreen = () => {
         servePersonalizedAds={permissionAdmob}
         onDidFailToReceiveAdWithError={(err) => console.log(err)}
       />
-    </View>
+    </>
   );
 };
