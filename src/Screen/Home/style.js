@@ -3,8 +3,8 @@ import {StyleSheet} from 'react-native';
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'flex-start',
-    justifyContent: 'center',
+    alignItems: 'stretch',
+    justifyContent: 'flex-start',
   },
   renderItemContainer: {
     height: 60,
@@ -43,8 +43,8 @@ const style = StyleSheet.create({
   },
   newIconContainer: {
     position: 'absolute',
-    bottom: 24,
-    right: 24,
+    bottom: 28,
+    right: 26,
   },
 });
 

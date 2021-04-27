@@ -149,10 +149,21 @@ export const HomeScreen = () => {
   return (
     <>
       <View style={style.container}>
+        <AdMobBanner
+          bannerSize="smartBannerPortrait"
+          adUnitID={
+            __DEV__
+              ? 'ca-app-pub-3940256099942544/2934735716' // test
+              : 'ca-app-pub-7379270123809470/3869103803'
+          }
+          servePersonalizedAds={permissionAdmob}
+          onDidFailToReceiveAdWithError={(err) => console.log(err)}
+        />
+        {/* <View style={{height: 100}}>
+        </View> */}
         {state.memoList && state.memoList.length ? (
           <View>
             <FlatList
-              style={{flex: 1, width: Dimensions.get('window').width}}
               data={state.memoList}
               renderItem={renderItem}
               keyExtractor={(item, index) => 'row_' + item.id}
@@ -168,16 +179,6 @@ export const HomeScreen = () => {
           <TouchButton name="New" onPress={navigateEditScreen} animationValue={animationValue} />
         </View>
       </View>
-      <AdMobBanner
-        bannerSize="smartBannerPortrait"
-        adUnitID={
-          __DEV__
-            ? 'ca-app-pub-3940256099942544/2934735716' // test
-            : 'ca-app-pub-7379270123809470/3869103803'
-        }
-        servePersonalizedAds={permissionAdmob}
-        onDidFailToReceiveAdWithError={(err) => console.log(err)}
-      />
     </>
   );
 };

@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useContext, useRef, useLayoutEffect, useCallback} from 'react';
-import {View, Alert, useWindowDimensions, Text, Modal, Switch} from 'react-native';
+import {View, Alert, useWindowDimensions, Text, Modal, Switch, Platform} from 'react-native';
 import Svg, {Polyline, Rect} from 'react-native-svg';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {FontAwesome} from '@expo/vector-icons';
@@ -158,21 +158,9 @@ export const EditScreen = () => {
     // });
   };
 
-  const handleAdmobPlay = async () => {
-    // AdMobRewarded.setAdUnitID(
-    //   __DEV__ ? 'ca-app-pub-3940256099942544/1712485313' : 'ca-app-pub-7379270123809470/6330724967'
-    // );
-    // await AdMobRewarded.requestAdAsync({servePersonalizedAds: permissionAdmob});
-    // await AdMobRewarded.showAdAsync();
-    // Display an interstitial
-    // await AdMobInterstitial.setAdUnitID(
-    //   'ca-app-pub-3940256099942544/4411468910'
-    // ); // Test ID, Replace with your-admob-unit-id
-    // await AdMobInterstitial.requestAdAsync({servePersonalizedAds: true});
-    // await AdMobInterstitial.showAdAsync();
-  };
+  const saveData = (message = true) => {
+    const timer = message ? 1500 : 0;
 
-  const saveData = () => {
     dispatch({
       TYPE: 'ITEM_UPDATE',
       INSERT: refNew.current,
@@ -182,13 +170,33 @@ export const EditScreen = () => {
         lastDate: getDate(),
       },
     });
-    Alert.alert('保存しました');
+    if (message) {
+      Alert.alert('保存しました');
+    }
     navigation.goBack();
   };
 
+  const handleAdmobPlay = async () => {
+    // AdMobRewarded.setAdUnitID(
+    //   __DEV__ ? 'ca-app-pub-3940256099942544/1712485313' : 'ca-app-pub-7379270123809470/6330724967'
+    // );
+    // await AdMobRewarded.requestAdAsync({servePersonalizedAds: permissionAdmob});
+    // await AdMobRewarded.showAdAsync();
+
+    // Display an interstitial
+    const unitId = Platform.select({
+      ios: __DEV__ ? 'ca-app-pub-3940256099942544/4411468910' : 'ca-app-pub-7379270123809470/2598757300',
+      android: 'ca-app-pub-3940256099942544/1033173712',
+    });
+    await AdMobInterstitial.setAdUnitID(unitId);
+    await AdMobInterstitial.requestAdAsync({servePersonalizedAds: permissionAdmob});
+    await AdMobInterstitial.showAdAsync();
+    saveData(false);
+  };
+
   const handleSaveData = () => {
-    // if (state.memoList.length > 2) {
-    //   Alert.alert('広告を閲覧しますか？', '3件以上メモを保存には広告を閲覧してください。', [
+    // if (refNew.current && state.memoList.length > 2) {
+    //   Alert.alert('広告の閲覧しますか？', '3件以上メモを保存には広告を閲覧してください。閲覧と同時に保存されます。', [
     //     {
     //       text: 'いいえ',
     //       onPress: undefined,
@@ -201,7 +209,7 @@ export const EditScreen = () => {
     //     },
     //   ]);
     // } else {
-
+    //   saveData();
     // }
     saveData();
   };
