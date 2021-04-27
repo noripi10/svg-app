@@ -1,15 +1,8 @@
 import React, {useEffect, useContext, useRef} from 'react';
-import {
-  View,
-  Text,
-  Dimensions,
-  Animated,
-  InteractionManager,
-  Alert,
-} from 'react-native';
+import {View, Text, Dimensions, Animated, InteractionManager, Alert} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
-import {AdMobBanner, AdMobInterstitial, AdMobRewarded} from 'expo-ads-admob';
+import {AdMobBanner} from 'expo-ads-admob';
 
 import {AppContext} from '../../Context/AppContext';
 import TouchButton from '../../Elements/TouchButton';
@@ -22,7 +15,7 @@ import style from './style';
 export const HomeScreen = () => {
   const animationValue = useRef(new Animated.Value(0)).current;
 
-  const {state, dispatch} = useContext(AppContext);
+  const {state, dispatch, permissionAdmob} = useContext(AppContext);
 
   const navigation = useNavigation();
 
@@ -35,15 +28,6 @@ export const HomeScreen = () => {
     }).start();
 
     InteractionManager.runAfterInteractions(async () => {
-      if (state.memoList.length % 2 !== 0) {
-        AdMobRewarded.setAdUnitID(
-          __DEV__
-            ? 'ca-app-pub-3940256099942544/1712485313'
-            : 'ca-app-pub-7379270123809470/6330724967'
-        );
-        await AdMobRewarded.requestAdAsync();
-        await AdMobRewarded.showAdAsync();
-      }
       navigation.navigate('Edit');
       await new Promise((resolve) => {
         setTimeout(() => {
@@ -176,17 +160,11 @@ export const HomeScreen = () => {
         </View>
       ) : (
         <View style={style.noDataMessageContainer}>
-          <Text style={{color: '#000', fontSize: 16}}>
-            新規メモを作成してください →{' '}
-          </Text>
+          <Text style={{color: '#000', fontSize: 16}}>新規メモを作成してください → </Text>
         </View>
       )}
       <View style={style.newIconContainer}>
-        <TouchButton
-          name="New"
-          onPress={navigateEditScreen}
-          animationValue={animationValue}
-        />
+        <TouchButton name="New" onPress={navigateEditScreen} animationValue={animationValue} />
       </View>
       <AdMobBanner
         style={{position: 'absolute', bottom: 0}}
@@ -196,7 +174,7 @@ export const HomeScreen = () => {
             ? 'ca-app-pub-3940256099942544/2934735716' // test
             : 'ca-app-pub-7379270123809470/3869103803'
         }
-        servePersonalizedAds
+        servePersonalizedAds={permissionAdmob}
         onDidFailToReceiveAdWithError={(err) => console.log(err)}
       />
     </View>

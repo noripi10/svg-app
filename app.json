@@ -22,7 +22,8 @@
       "infoPlist": {
         "CFBundleDevelopmentRegion": "ja_JP",
         "NSPhotoLibraryUsageDescription": "メモ画像を保存するためにフォトライブラリを使用します",
-        "NSPhotoLibraryAddUsageDescription": "メモ画像を保存するためにフォトライブラリを使用します"
+        "NSPhotoLibraryAddUsageDescription": "メモ画像を保存するためにフォトライブラリを使用します",
+        "NSUserTrackingUsageDescription": "広告のパーソナライズのみを目的として使用され、表示される広告が増えることはありません"
       },
       "config": {
         "googleMobileAdsAppId": "ca-app-pub-7379270123809470~4236128830"

@@ -1,19 +1,5 @@
-import React, {
-  useEffect,
-  useState,
-  useContext,
-  useRef,
-  useLayoutEffect,
-  useCallback,
-} from 'react';
-import {
-  View,
-  Alert,
-  useWindowDimensions,
-  Text,
-  Modal,
-  Switch,
-} from 'react-native';
+import React, {useEffect, useState, useContext, useRef, useLayoutEffect, useCallback} from 'react';
+import {View, Alert, useWindowDimensions, Text, Modal, Switch} from 'react-native';
 import Svg, {Polyline, Rect} from 'react-native-svg';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {FontAwesome} from '@expo/vector-icons';
@@ -21,6 +7,7 @@ import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import Slider from '@react-native-community/slider';
 import {captureRef} from 'react-native-view-shot';
 import * as MediaLibrary from 'expo-media-library';
+import {AdMobInterstitial, AdMobRewarded} from 'expo-ads-admob';
 
 import {getDate, getGuid, getPixels, memoObject} from '../../Util/Common';
 import {AppContext} from '../../Context/AppContext';
@@ -29,7 +16,7 @@ import {SwitchItem} from '../../Elements/SwitchItem';
 import style from './style';
 
 export const EditScreen = () => {
-  const {state, dispatch, permission} = useContext(AppContext);
+  const {state, dispatch, permissionCameraRoll, permissionAdmob} = useContext(AppContext);
   const [changed, setChanged] = useState(false);
   const [item, setItem] = useState(memoObject);
   const [currentStroke, setCurrentStroke] = useState('#000');
@@ -55,6 +42,13 @@ export const EditScreen = () => {
         navigation.goBack();
       }
     }
+
+    // AdMobRewarded.addEventListener('rewardedVideoDidPresent', () => {
+    //   saveData();
+    // });
+    // return () => {
+    //   AdMobRewarded.removeAllListeners();
+    // };
   }, []);
 
   useEffect(() => {
@@ -65,9 +59,7 @@ export const EditScreen = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: (props) => (
-        <TouchableOpacity
-          style={{marginLeft: 15}}
-          onPress={() => navigationGoBack()}>
+        <TouchableOpacity style={{marginLeft: 15}} onPress={() => navigationGoBack()}>
           <FontAwesome name="arrow-down" size={24} color="#fff" />
         </TouchableOpacity>
       ),
@@ -166,7 +158,21 @@ export const EditScreen = () => {
     // });
   };
 
-  const handleSaveData = () => {
+  const handleAdmobPlay = async () => {
+    // AdMobRewarded.setAdUnitID(
+    //   __DEV__ ? 'ca-app-pub-3940256099942544/1712485313' : 'ca-app-pub-7379270123809470/6330724967'
+    // );
+    // await AdMobRewarded.requestAdAsync({servePersonalizedAds: permissionAdmob});
+    // await AdMobRewarded.showAdAsync();
+    // Display an interstitial
+    // await AdMobInterstitial.setAdUnitID(
+    //   'ca-app-pub-3940256099942544/4411468910'
+    // ); // Test ID, Replace with your-admob-unit-id
+    // await AdMobInterstitial.requestAdAsync({servePersonalizedAds: true});
+    // await AdMobInterstitial.showAdAsync();
+  };
+
+  const saveData = () => {
     dispatch({
       TYPE: 'ITEM_UPDATE',
       INSERT: refNew.current,
@@ -178,6 +184,26 @@ export const EditScreen = () => {
     });
     Alert.alert('保存しました');
     navigation.goBack();
+  };
+
+  const handleSaveData = () => {
+    // if (state.memoList.length > 2) {
+    //   Alert.alert('広告を閲覧しますか？', '3件以上メモを保存には広告を閲覧してください。', [
+    //     {
+    //       text: 'いいえ',
+    //       onPress: undefined,
+    //       style: 'cancel',
+    //     },
+    //     {
+    //       text: 'はい',
+    //       onPress: () => handleAdmobPlay(),
+    //       style: 'default',
+    //     },
+    //   ]);
+    // } else {
+
+    // }
+    saveData();
   };
 
   const handleCapture = async () => {
@@ -232,10 +258,8 @@ export const EditScreen = () => {
             onChangeText={(text) => handleChangeTitle(text)}
             value={item.title}
           />
-          {permission && (
-            <TouchableOpacity
-              style={[style.button, {margin: 0, padding: 0}]}
-              onPress={() => handleCapture()}>
+          {permissionCameraRoll && (
+            <TouchableOpacity style={[style.button, {margin: 0, padding: 0}]} onPress={() => handleCapture()}>
               <FontAwesome name="save" color="#000" size={28} />
             </TouchableOpacity>
           )}
@@ -299,9 +323,7 @@ export const EditScreen = () => {
             justifyContent: 'center',
             marginLeft: 16,
           }}>
-          <TouchableOpacity
-            style={[style.button, {backgroundColor: 'green'}]}
-            onPress={() => setDisplayModal(true)}>
+          <TouchableOpacity style={[style.button, {backgroundColor: 'green'}]} onPress={() => setDisplayModal(true)}>
             <Text style={{color: '#fff'}}>設定</Text>
           </TouchableOpacity>
         </View>
@@ -312,9 +334,7 @@ export const EditScreen = () => {
             alignSelf: 'center',
             justifyContent: 'center',
           }}>
-          <TouchableOpacity
-            style={[style.button, {backgroundColor: '#457af7'}]}
-            onPress={() => handleClearLine()}>
+          <TouchableOpacity style={[style.button, {backgroundColor: '#457af7'}]} onPress={() => handleClearLine()}>
             <Text style={{color: '#fff'}}>全クリア</Text>
           </TouchableOpacity>
           <View style={{marginHorizontal: 10}} />
@@ -324,9 +344,7 @@ export const EditScreen = () => {
           >
             <Text style={{color: '#fff'}}>戻す</Text>
           </TouchableOpacity> */}
-          <TouchableOpacity
-            style={[style.button, {backgroundColor: '#242424'}]}
-            onPress={() => handleSaveData()}>
+          <TouchableOpacity style={[style.button, {backgroundColor: '#242424'}]} onPress={() => handleSaveData()}>
             <Text style={{color: '#fff'}}>保存</Text>
           </TouchableOpacity>
         </View>
@@ -336,26 +354,10 @@ export const EditScreen = () => {
         <View style={style.modalView}>
           <Text style={style.modalTitle}>・色選択</Text>
           <View style={style.modalSwitchContainer}>
-            <SwitchItem
-              name="黒"
-              color="#000"
-              {...{currentStroke, setCurrentStroke}}
-            />
-            <SwitchItem
-              name="赤"
-              color="red"
-              {...{currentStroke, setCurrentStroke}}
-            />
-            <SwitchItem
-              name="青"
-              color="blue"
-              {...{currentStroke, setCurrentStroke}}
-            />
-            <SwitchItem
-              name="緑"
-              color="green"
-              {...{currentStroke, setCurrentStroke}}
-            />
+            <SwitchItem name="黒" color="#000" {...{currentStroke, setCurrentStroke}} />
+            <SwitchItem name="赤" color="red" {...{currentStroke, setCurrentStroke}} />
+            <SwitchItem name="青" color="blue" {...{currentStroke, setCurrentStroke}} />
+            <SwitchItem name="緑" color="green" {...{currentStroke, setCurrentStroke}} />
           </View>
           <Text style={style.modalTitle}>・太さ</Text>
           <Slider
@@ -369,10 +371,7 @@ export const EditScreen = () => {
           <Text>{currentStrokeWidth}</Text>
           <View style={style.modalCloseContainer}>
             <TouchableOpacity
-              style={[
-                style.button,
-                {backgroundColor: '#bbb', marginBottom: 20},
-              ]}
+              style={[style.button, {backgroundColor: '#bbb', marginBottom: 20}]}
               onPress={() => setDisplayModal(false)}>
               <Text>閉じる</Text>
             </TouchableOpacity>
