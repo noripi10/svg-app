@@ -6,7 +6,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "generate-license": "npx license-ls --depth=0 --prod --format=json > './src/assets/license.json'",
+    "generate-license": "npx license-ls --depth=0 --prod --format=json > './assets/license.json'",
     "postinstall": "yarn generate-license"
   },
   "dependencies": {
@@ -19,9 +19,11 @@
     "@react-navigation/stack": "^5.12.8",
     "expo": "^41.0.0",
     "expo-ads-admob": "~10.0.4",
+    "expo-linking": "~2.2.3",
     "expo-media-library": "~12.0.2",
     "expo-permissions": "~12.0.1",
     "expo-status-bar": "~1.0.4",
+    "expo-store-review": "~4.0.2",
     "expo-updates": "~0.5.4",
     "react": "16.13.1",
     "react-dom": "16.13.1",

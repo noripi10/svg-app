@@ -2,6 +2,7 @@ import React, {useEffect, useContext, useRef} from 'react';
 import {View, Text, Dimensions, Animated, InteractionManager, Alert} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
+import * as StoreReview from 'expo-store-review';
 import {AdMobBanner} from 'expo-ads-admob';
 
 import {AppContext} from '../../Context/AppContext';
@@ -38,6 +39,23 @@ export const HomeScreen = () => {
     });
   };
 
+  const storeReviewHandle = async () => {
+    let reviewed = false;
+    try {
+      reviewed = await storage.load({key: 'review'});
+    } catch (error3) {
+      console.log({error3});
+      reviewed = false;
+    }
+    console.log({reviewed});
+    if (!!!reviewed && (await StoreReview.hasAction())) {
+      await StoreReview.requestReview();
+      // 30日間レビュー保存
+      await storage.save({key: 'review', data: true, expires: 1000 * 60 * 60 * 24 * 30});
+    }
+    return true;
+  };
+
   useEffect(() => {
     navigation.setOptions({
       title: 'メモ一覧',
@@ -55,6 +73,12 @@ export const HomeScreen = () => {
       // ),
     });
   }, [state]);
+
+  useEffect(() => {
+    if (state.memoList.length >= 3) {
+      storeReviewHandle();
+    }
+  }, [navigation]);
 
   useEffect(() => {
     let isUnmounted = false;
@@ -108,8 +132,8 @@ export const HomeScreen = () => {
         //   TYPE: 'DATA_INIT_TEST',
         //   memoList: testList,
         // });
-      } catch (e) {
-        console.log(e);
+      } catch (error1) {
+        console.log({error1});
         if (!isUnmounted) {
           dispatch({
             TYPE: 'DATA_INIT_FIRST',
@@ -157,7 +181,7 @@ export const HomeScreen = () => {
               : 'ca-app-pub-7379270123809470/3869103803'
           }
           servePersonalizedAds={permissionAdmob}
-          onDidFailToReceiveAdWithError={(err) => console.log(err)}
+          onDidFailToReceiveAdWithError={(adWithError) => console.log({adWithError})}
         />
         {/* <View style={{height: 100}}>
         </View> */}

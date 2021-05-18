@@ -108,8 +108,8 @@ export const EditScreen = () => {
         ],
       });
       setChanged(true);
-    } catch (e) {
-      console.log('error', e);
+    } catch (error2) {
+      console.log({error2});
     }
 
     setCurrentPoints([]);
@@ -171,7 +171,7 @@ export const EditScreen = () => {
       },
     });
     if (message) {
-      Alert.alert('保存しました');
+      // Alert.alert('保存しました');
     }
     navigation.goBack();
   };
