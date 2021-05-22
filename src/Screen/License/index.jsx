@@ -1,7 +1,7 @@
-import React, {useEffect} from 'react';
-import {View, FlatList, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import {FontAwesome} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/native';
+import React, {useEffect} from 'react';
+import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import LICENSE from '../../../assets/license.json';
 
 const _renderItem = ({item, index}) => {
@@ -26,9 +26,7 @@ export const LicenseScreen = ({}) => {
   useEffect(() => {
     navigation.setOptions({
       headerLeft: (props) => (
-        <TouchableOpacity
-          style={{marginLeft: 15}}
-          onPress={() => navigation.goBack()}>
+        <TouchableOpacity style={{marginLeft: 15}} onPress={() => navigation.goBack()}>
           <FontAwesome name="arrow-down" size={24} color="#fff" />
         </TouchableOpacity>
       ),

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Animated, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {Animated, StyleSheet, TouchableOpacity} from 'react-native';
 
 const TouchButton = ({onPress, name, animationValue}) => (
   <TouchableOpacity style={styles.touchButton} onPress={onPress}>

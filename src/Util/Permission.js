@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import * as Admob from 'expo-ads-admob';
 // import * as Permissions from 'expo-permissions';
 import * as MediaLibrary from 'expo-media-library';
-import * as Admob from 'expo-ads-admob';
+import {useEffect, useState} from 'react';
 
 export const useCameraPermission = () => {
   const [permission, setPermission] = useState(null);

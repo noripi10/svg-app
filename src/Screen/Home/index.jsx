@@ -1,16 +1,14 @@
-import React, {useEffect, useContext, useRef} from 'react';
-import {View, Text, Dimensions, Animated, InteractionManager, Alert} from 'react-native';
-import {FlatList} from 'react-native-gesture-handler';
 import {useNavigation} from '@react-navigation/native';
-import * as StoreReview from 'expo-store-review';
 import {AdMobBanner} from 'expo-ads-admob';
-
+import * as StoreReview from 'expo-store-review';
+import React, {useContext, useEffect, useRef} from 'react';
+import {Alert, Animated, InteractionManager, Text, View} from 'react-native';
+import {FlatList} from 'react-native-gesture-handler';
 import {AppContext} from '../../Context/AppContext';
-import TouchButton from '../../Elements/TouchButton';
-import Separator from '../../Elements/Separator';
 import {MemoListItem} from '../../Elements/MemoListItem';
-
-import {getDate, storage, getGuid} from '../../Util/Common';
+import Separator from '../../Elements/Separator';
+import TouchButton from '../../Elements/TouchButton';
+import {getDate, getGuid, storage} from '../../Util/Common';
 import style from './style';
 
 export const HomeScreen = () => {

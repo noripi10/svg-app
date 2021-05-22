@@ -1,5 +1,5 @@
-import React from 'react';
 import {NavigationContainer, useTheme} from '@react-navigation/native';
+import React from 'react';
 import {StackNavigator} from './StackNavigation';
 
 export const AppNavigator = () => {

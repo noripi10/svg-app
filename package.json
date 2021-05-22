@@ -7,7 +7,9 @@
     "web": "expo start --web",
     "eject": "expo eject",
     "generate-license": "npx license-ls --depth=0 --prod --format=json > './assets/license.json'",
-    "postinstall": "yarn generate-license"
+    "postinstall": "yarn generate-license",
+    "lint": "eslint ./src/**/*.{js,jsx}",
+    "lint-fix": "eslint --fix ./src/**/*.{js,jsx}"
   },
   "dependencies": {
     "@expo/vector-icons": "^12.0.0",
@@ -38,7 +40,12 @@
     "react-native-web": "~0.13.12"
   },
   "devDependencies": {
-    "@babel/core": "~7.9.0"
+    "@babel/core": "~7.9.0",
+    "eslint": "^7.27.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "eslint-plugin-react": "^7.23.2",
+    "eslint-plugin-react-hooks": "^4.2.0",
+    "prettier": "^2.3.0"
   },
   "private": true
 }

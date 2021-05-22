@@ -1,17 +1,12 @@
-import React, {useContext} from 'react';
-import {Text} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
-
-import {AppContext} from '../Context/AppContext';
-import {HomeScreen} from '../Screen/Home';
+import React from 'react';
 import {EditScreen} from '../Screen/Edit';
+import {HomeScreen} from '../Screen/Home';
 import {LicenseScreen} from '../Screen/License';
 
 const Stack = createStackNavigator();
 
 export const StackNavigator = () => {
-  const {state} = useContext(AppContext);
-
   return (
     <Stack.Navigator
       mode="modal"

@@ -1,7 +1,7 @@
-import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 import {FontAwesome} from '@expo/vector-icons';
+import React from 'react';
+import {StyleSheet, Text, View} from 'react-native';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export const MemoListItem = ({navigation, item, index, handleDeleteItem}) => {
   return (
@@ -9,8 +9,7 @@ export const MemoListItem = ({navigation, item, index, handleDeleteItem}) => {
       style={[
         style.renderItemContainer,
         {
-          backgroundColor:
-            index % 2 === 0 || index === 0 ? '#e2f8fe' : '#f5fdff',
+          backgroundColor: index % 2 === 0 || index === 0 ? '#e2f8fe' : '#f5fdff',
         },
       ]}>
       <TouchableOpacity
@@ -21,9 +20,7 @@ export const MemoListItem = ({navigation, item, index, handleDeleteItem}) => {
         <Text style={style.updateDate}>{item.lastDate}</Text>
       </TouchableOpacity>
       <View style={style.deleteItemContainer}>
-        <TouchableOpacity
-          style={style.deleteIcon}
-          onPress={() => handleDeleteItem(item.id)}>
+        <TouchableOpacity style={style.deleteIcon} onPress={() => handleDeleteItem(item.id)}>
           <FontAwesome name="trash-o" size={20} color="#fff" />
         </TouchableOpacity>
       </View>

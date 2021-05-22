@@ -1,10 +1,9 @@
-import React, {useContext} from 'react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {FontAwesome} from '@expo/vector-icons';
-
-import HomeScreen from '../Screen/Home';
-import EditScreen from '../Screen/Edit';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import React, {useContext} from 'react';
 import {AppContext} from '../Context/AppContext';
+import EditScreen from '../Screen/Edit';
+import HomeScreen from '../Screen/Home';
 
 const BottomNavigator = () => {
   const Tab = createBottomTabNavigator();
@@ -17,6 +16,7 @@ const BottomNavigator = () => {
         inactiveTintColor: 'gray',
       }}
       screenOptions={({route}) => ({
+        // eslint-disable-next-line react/display-name
         tabBarIcon: ({focused, size, color}) => {
           let iconName;
           if (route.name === 'Home') {
@@ -28,16 +28,8 @@ const BottomNavigator = () => {
         },
         tabBarBadge: state.memoList.length,
       })}>
-      <Tab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{title: 'ホーム'}}
-      />
-      <Tab.Screen
-        name="Edit"
-        component={EditScreen}
-        options={{title: '明細'}}
-      />
+      <Tab.Screen name="Home" component={HomeScreen} options={{title: 'ホーム'}} />
+      <Tab.Screen name="Edit" component={EditScreen} options={{title: '明細'}} />
     </Tab.Navigator>
   );
 };

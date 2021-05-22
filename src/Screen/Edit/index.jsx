@@ -1,18 +1,16 @@
-import React, {useEffect, useState, useContext, useRef, useLayoutEffect, useCallback} from 'react';
-import {View, Alert, useWindowDimensions, Text, Modal, Switch, Platform} from 'react-native';
-import Svg, {Polyline, Rect} from 'react-native-svg';
-import {useNavigation, useRoute} from '@react-navigation/native';
 import {FontAwesome} from '@expo/vector-icons';
-import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import Slider from '@react-native-community/slider';
-import {captureRef} from 'react-native-view-shot';
+import {useNavigation, useRoute} from '@react-navigation/native';
+import {AdMobInterstitial} from 'expo-ads-admob';
 import * as MediaLibrary from 'expo-media-library';
-import {AdMobInterstitial, AdMobRewarded} from 'expo-ads-admob';
-
-import {getDate, getGuid, getPixels, memoObject} from '../../Util/Common';
+import React, {useCallback, useContext, useEffect, useLayoutEffect, useRef, useState} from 'react';
+import {Alert, Modal, Platform, Text, useWindowDimensions, View} from 'react-native';
+import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
+import Svg, {Polyline, Rect} from 'react-native-svg';
+import {captureRef} from 'react-native-view-shot';
 import {AppContext} from '../../Context/AppContext';
 import {SwitchItem} from '../../Elements/SwitchItem';
-
+import {getDate, getGuid, getPixels, memoObject} from '../../Util/Common';
 import style from './style';
 
 export const EditScreen = () => {
