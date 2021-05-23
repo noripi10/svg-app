@@ -1,9 +1,11 @@
 import {FontAwesome} from '@expo/vector-icons';
+import PropTypes from 'prop-types';
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export const MemoListItem = ({navigation, item, index, handleDeleteItem}) => {
+  console.log({navigation});
   return (
     <View
       style={[
@@ -26,6 +28,13 @@ export const MemoListItem = ({navigation, item, index, handleDeleteItem}) => {
       </View>
     </View>
   );
+};
+
+MemoListItem.propTypes = {
+  navigation: PropTypes.object.isRequired,
+  item: PropTypes.object.isRequired,
+  index: PropTypes.number.isRequired,
+  handleDeleteItem: PropTypes.func.isRequired,
 };
 
 const style = StyleSheet.create({

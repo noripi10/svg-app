@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {Animated, StyleSheet, TouchableOpacity} from 'react-native';
 
@@ -17,6 +18,12 @@ const TouchButton = ({onPress, name, animationValue}) => (
     </Animated.Text>
   </TouchableOpacity>
 );
+
+TouchButton.propTypes = {
+  onPress: PropTypes.func.isRequired,
+  name: PropTypes.string.isRequired,
+  animationValue: PropTypes.instanceOf(Animated.Value),
+};
 
 const styles = StyleSheet.create({
   touchButton: {

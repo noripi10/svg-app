@@ -16,8 +16,7 @@ const BottomNavigator = () => {
         inactiveTintColor: 'gray',
       }}
       screenOptions={({route}) => ({
-        // eslint-disable-next-line react/display-name
-        tabBarIcon: ({focused, size, color}) => {
+        tabBarIcon: function tabBarIconFunc({focused, size, color}) {
           let iconName;
           if (route.name === 'Home') {
             iconName = focused ? 'apple' : 'apple';

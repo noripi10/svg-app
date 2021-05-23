@@ -1,10 +1,11 @@
 import {FontAwesome} from '@expo/vector-icons';
 import {useNavigation} from '@react-navigation/native';
+import PropTypes from 'prop-types';
 import React, {useEffect} from 'react';
 import {FlatList, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import LICENSE from '../../../assets/license.json';
 
-const _renderItem = ({item, index}) => {
+const _renderItem = ({item}) => {
   return (
     <View style={styles.renderContainer}>
       <View style={styles.itemHeader}>
@@ -20,16 +21,23 @@ const _renderItem = ({item, index}) => {
   );
 };
 
-export const LicenseScreen = ({}) => {
+_renderItem.propTypes = {
+  item: PropTypes.object.isRequired,
+  index: PropTypes.number,
+};
+
+export const LicenseScreen = () => {
   const navigation = useNavigation();
 
   useEffect(() => {
     navigation.setOptions({
-      headerLeft: (props) => (
-        <TouchableOpacity style={{marginLeft: 15}} onPress={() => navigation.goBack()}>
-          <FontAwesome name="arrow-down" size={24} color="#fff" />
-        </TouchableOpacity>
-      ),
+      headerLeft: function funcHeaderLeft() {
+        return (
+          <TouchableOpacity style={{marginLeft: 15}} onPress={() => navigation.goBack()}>
+            <FontAwesome name="arrow-down" size={24} color="#fff" />
+          </TouchableOpacity>
+        );
+      },
     });
   }, [navigation]);
 

@@ -14,14 +14,14 @@ import {getDate, getGuid, getPixels, memoObject} from '../../Util/Common';
 import style from './style';
 
 export const EditScreen = () => {
-  const {state, dispatch, permissionCameraRoll, permissionAdmob} = useContext(AppContext);
+  const {dispatch, permissionCameraRoll, permissionAdmob} = useContext(AppContext);
   const [changed, setChanged] = useState(false);
   const [item, setItem] = useState(memoObject);
   const [currentStroke, setCurrentStroke] = useState('#000');
   const [currentStrokeWidth, setCurrentStrokeWidth] = useState(2);
   const [currentPoints, setCurrentPoints] = useState([]);
   const [displayModal, setDisplayModal] = useState(false);
-  const [drawColor, setDrawColor] = useState('#000');
+  // const [drawColor, setDrawColor] = useState('#000');
   const refNew = useRef(true);
   const refViewShot = useRef(null);
 
@@ -47,22 +47,24 @@ export const EditScreen = () => {
     // return () => {
     //   AdMobRewarded.removeAllListeners();
     // };
-  }, []);
+  }, [route.params, navigation]);
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', (params) => {});
-    return unsubscribe;
-  }, [navigation]);
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', (params) => {});
+  //   return unsubscribe;
+  // }, [navigation]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerLeft: (props) => (
-        <TouchableOpacity style={{marginLeft: 15}} onPress={() => navigationGoBack()}>
-          <FontAwesome name="arrow-down" size={24} color="#fff" />
-        </TouchableOpacity>
-      ),
+      headerLeft: function headerLeftFunc() {
+        return (
+          <TouchableOpacity style={{marginLeft: 15}} onPress={() => navigationGoBack()}>
+            <FontAwesome name="arrow-down" size={24} color="#fff" />
+          </TouchableOpacity>
+        );
+      },
     });
-  }, [navigation, route, changed]);
+  }, [navigation, route, changed, navigationGoBack]);
 
   const navigationGoBack = useCallback(() => {
     if (changed) {
@@ -81,7 +83,7 @@ export const EditScreen = () => {
     } else {
       navigation.goBack();
     }
-  }, [changed]);
+  }, [changed, navigation]);
 
   const handleTouchMove = (event) => {
     const {locationX, locationY, touches} = event.nativeEvent;

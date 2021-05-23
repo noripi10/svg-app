@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import {StyleSheet, Switch, Text, View} from 'react-native';
 
@@ -19,6 +20,13 @@ export const SwitchItem = ({name, color, currentStroke, setCurrentStroke}) => {
       />
     </View>
   );
+};
+
+SwitchItem.propTypes = {
+  name: PropTypes.string.isRequired,
+  color: PropTypes.string,
+  currentStroke: PropTypes.string,
+  setCurrentStroke: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
