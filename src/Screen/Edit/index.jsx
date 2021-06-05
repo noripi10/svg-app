@@ -1,9 +1,9 @@
+import React, {useCallback, useContext, useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {FontAwesome} from '@expo/vector-icons';
 import Slider from '@react-native-community/slider';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {AdMobInterstitial} from 'expo-ads-admob';
 import * as MediaLibrary from 'expo-media-library';
-import React, {useCallback, useContext, useEffect, useLayoutEffect, useRef, useState} from 'react';
 import {Alert, Modal, Platform, Text, useWindowDimensions, View} from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import Svg, {Polyline, Rect} from 'react-native-svg';
@@ -14,7 +14,7 @@ import {getDate, getGuid, getPixels, memoObject} from '../../Util/Common';
 import style from './style';
 
 export const EditScreen = () => {
-  const {dispatch, permissionCameraRoll, permissionAdmob} = useContext(AppContext);
+  const {state, dispatch, permissionCameraRoll, permissionAdmob} = useContext(AppContext);
   const [changed, setChanged] = useState(false);
   const [item, setItem] = useState(memoObject);
   const [currentStroke, setCurrentStroke] = useState('#000');
@@ -195,22 +195,24 @@ export const EditScreen = () => {
   };
 
   const handleSaveData = () => {
-    // if (refNew.current && state.memoList.length > 2) {
-    //   Alert.alert('広告の閲覧しますか？', '3件以上メモを保存には広告を閲覧してください。閲覧と同時に保存されます。', [
-    //     {
-    //       text: 'いいえ',
-    //       onPress: undefined,
-    //       style: 'cancel',
-    //     },
-    //     {
-    //       text: 'はい',
-    //       onPress: () => handleAdmobPlay(),
-    //       style: 'default',
-    //     },
-    //   ]);
-    // } else {
-    //   saveData();
-    // }
+    if (refNew.current && state.memoList.length % 3 === 0) {
+      //   Alert.alert('広告の閲覧しますか？', '3件以上メモを保存には広告を閲覧してください。閲覧と同時に保存されます。', [
+      //     {
+      //       text: 'いいえ',
+      //       onPress: undefined,
+      //       style: 'cancel',
+      //     },
+      //     {
+      //       text: 'はい',
+      //       onPress: () => handleAdmobPlay(),
+      //       style: 'default',
+      //     },
+      //   ]);
+      // } else {
+      //   saveData();
+      handleAdmobPlay();
+      return false;
+    }
     saveData();
   };
 
@@ -366,6 +368,7 @@ export const EditScreen = () => {
             <SwitchItem name="赤" color="red" {...{currentStroke, setCurrentStroke}} />
             <SwitchItem name="青" color="blue" {...{currentStroke, setCurrentStroke}} />
             <SwitchItem name="緑" color="green" {...{currentStroke, setCurrentStroke}} />
+            <SwitchItem name="黄" color="yellow" {...{currentStroke, setCurrentStroke}} />
           </View>
           <Text style={style.modalTitle}>・太さ</Text>
           <Slider

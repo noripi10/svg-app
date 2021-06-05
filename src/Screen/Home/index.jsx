@@ -1,7 +1,7 @@
+import React, {useContext, useEffect, useRef} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {AdMobBanner} from 'expo-ads-admob';
 import * as StoreReview from 'expo-store-review';
-import React, {useContext, useEffect, useRef} from 'react';
 import {Alert, Animated, InteractionManager, Text, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {AppContext} from '../../Context/AppContext';
@@ -45,8 +45,8 @@ export const HomeScreen = () => {
       console.log({error3});
       reviewed = false;
     }
-    console.log({reviewed});
-    if (!!!reviewed && (await StoreReview.hasAction())) {
+
+    if (!reviewed && (await StoreReview.hasAction())) {
       await StoreReview.requestReview();
       // 30日間レビュー保存
       await storage.save({key: 'review', data: true, expires: 1000 * 60 * 60 * 24 * 30});
@@ -57,6 +57,7 @@ export const HomeScreen = () => {
   useEffect(() => {
     navigation.setOptions({
       title: 'メモ一覧',
+      // eslint-disable-next-line
       headerRight: () => {
         return (
           <Text style={{color: '#fff', marginRight: 16}}>
@@ -66,17 +67,17 @@ export const HomeScreen = () => {
       },
       // headerLeft: () => (
       //   <TouchableOpacity onPress={() => navigation.navigate('License')}>
-      //     <Text style={{color: '#fff'}}>{'　使用パッケージ'}</Text>
+      //     <Text style={{color: '#fff'}}>{'使用パッケージ'}</Text>
       //   </TouchableOpacity>
       // ),
     });
-  }, [state]);
+  }, [state, navigation]);
 
   useEffect(() => {
     if (state.memoList.length >= 3) {
       storeReviewHandle();
     }
-  }, [navigation]);
+  }, [state]);
 
   useEffect(() => {
     let isUnmounted = false;
@@ -95,6 +96,7 @@ export const HomeScreen = () => {
           });
         }
         // test_data
+        // eslint-disable-next-line
         const testList = [
           {
             id: 'memo_' + getGuid(),
@@ -143,7 +145,7 @@ export const HomeScreen = () => {
     funcInit();
 
     return () => (isUnmounted = true);
-  }, []);
+  }, [dispatch]);
 
   const handleDeleteItem = (id) => {
     Alert.alert('削除しますか？', '', [
@@ -174,6 +176,7 @@ export const HomeScreen = () => {
         <AdMobBanner
           bannerSize="smartBannerPortrait"
           adUnitID={
+            // eslint-disable-next-line
             __DEV__
               ? 'ca-app-pub-3940256099942544/2934735716' // test
               : 'ca-app-pub-7379270123809470/3869103803'
@@ -188,7 +191,7 @@ export const HomeScreen = () => {
             <FlatList
               data={state.memoList}
               renderItem={renderItem}
-              keyExtractor={(item, index) => 'row_' + item.id}
+              keyExtractor={(item) => 'row_' + item.id}
               ItemSeparatorComponent={() => <Separator />}
             />
           </View>

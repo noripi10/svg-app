@@ -5,7 +5,6 @@ import {StyleSheet, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export const MemoListItem = ({navigation, item, index, handleDeleteItem}) => {
-  console.log({navigation});
   return (
     <View
       style={[
